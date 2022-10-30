@@ -1,0 +1,162 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	'Mapping Middel To Lief',
+	8,
+	'MML',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("856e2ed9-6496-4544-82d1-3e711c0a30a6",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c");
+INSERT INTO O_BATTR
+	VALUES ("856e2ed9-6496-4544-82d1-3e711c0a30a6",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c");
+INSERT INTO O_ATTR
+	VALUES ("856e2ed9-6496-4544-82d1-3e711c0a30a6",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	"00000000-0000-0000-0000-000000000000",
+	'MMLId',
+	'',
+	'',
+	'MMLId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	"b9d246e2-2ced-4679-9c21-c885d2a20b6e",
+	0,
+	"61cbd3c8-f49b-406f-815d-fe05f0728cd4",
+	"66adfe21-6a1c-445e-9329-e946d463ff33",
+	"04a6dad4-8917-488f-9fff-7b9aa8efcb30",
+	"e0a5a4d5-197b-4b53-8a19-5a3a6d98c8b4",
+	"bf4b7d4b-3d5c-4d8b-a85f-1afaa925b54e",
+	"425629d3-3af3-4dc5-966b-883d913db800",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Middle Entity',
+	'MiddleEntityId',
+	'R5.''middle''');
+INSERT INTO R_RGO_PROXY
+	VALUES ("f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	"66adfe21-6a1c-445e-9329-e946d463ff33",
+	"04a6dad4-8917-488f-9fff-7b9aa8efcb30",
+	'../ADTTestModel.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("61cbd3c8-f49b-406f-815d-fe05f0728cd4",
+	"b9d246e2-2ced-4679-9c21-c885d2a20b6e",
+	0,
+	"66adfe21-6a1c-445e-9329-e946d463ff33",
+	"e0a5a4d5-197b-4b53-8a19-5a3a6d98c8b4",
+	'../ADTTestModel.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("bf4b7d4b-3d5c-4d8b-a85f-1afaa925b54e",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	"61cbd3c8-f49b-406f-815d-fe05f0728cd4",
+	"b9d246e2-2ced-4679-9c21-c885d2a20b6e",
+	1,
+	'MiddleEntityId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("61cbd3c8-f49b-406f-815d-fe05f0728cd4",
+	"b9d246e2-2ced-4679-9c21-c885d2a20b6e",
+	'../Middle Entity/Middle Entity.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("bf4b7d4b-3d5c-4d8b-a85f-1afaa925b54e",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	"856e2ed9-6496-4544-82d1-3e711c0a30a6",
+	'MiddleEntityId',
+	'',
+	'',
+	'MiddleEntityId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	0,
+	"7b2b0dc2-de98-4547-9fdd-d10b3ddccde8",
+	"66adfe21-6a1c-445e-9329-e946d463ff33",
+	"04a6dad4-8917-488f-9fff-7b9aa8efcb30",
+	"5405d276-8855-4a95-b3dc-af129865f195",
+	"5e33781e-aee9-4947-89f8-b4c11fd79539",
+	"a8edf860-118e-4ed0-add9-f0600120f397",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Lief Device',
+	'LiefDeviceId',
+	'R5.''lief''');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("7b2b0dc2-de98-4547-9fdd-d10b3ddccde8",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	0,
+	"66adfe21-6a1c-445e-9329-e946d463ff33",
+	"5405d276-8855-4a95-b3dc-af129865f195",
+	'../ADTTestModel.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("5e33781e-aee9-4947-89f8-b4c11fd79539",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	"7b2b0dc2-de98-4547-9fdd-d10b3ddccde8",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	1,
+	'LiefDeviceId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("7b2b0dc2-de98-4547-9fdd-d10b3ddccde8",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	'../Lief Device/Lief Device.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("5e33781e-aee9-4947-89f8-b4c11fd79539",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	"bf4b7d4b-3d5c-4d8b-a85f-1afaa925b54e",
+	'LiefDeviceId',
+	'',
+	'',
+	'LiefDeviceId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c");
+INSERT INTO O_OIDA
+	VALUES ("856e2ed9-6496-4544-82d1-3e711c0a30a6",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	0,
+	'MMLId');
+INSERT INTO O_ID
+	VALUES (1,
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c");
+INSERT INTO O_OIDA
+	VALUES ("bf4b7d4b-3d5c-4d8b-a85f-1afaa925b54e",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	1,
+	'MiddleEntityId');
+INSERT INTO O_OIDA
+	VALUES ("5e33781e-aee9-4947-89f8-b4c11fd79539",
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	1,
+	'LiefDeviceId');
+INSERT INTO O_ID
+	VALUES (2,
+	"f4877fe5-4b18-47bb-a221-fb05899cc90c");
+INSERT INTO PE_PE
+	VALUES ("f4877fe5-4b18-47bb-a221-fb05899cc90c",
+	1,
+	"db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	"f9c35d69-d88c-4370-8bf2-12496b4980db",
+	'ADTTestModel',
+	'',
+	0,
+	'../ADTTestModel.xtuml');

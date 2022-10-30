@@ -1,0 +1,266 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	'Lief Device',
+	3,
+	'LD',
+	'@iotpnp',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("71a713f8-a16f-449d-ae9f-8285b56a8b1b",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	'Command',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	1);
+INSERT INTO O_TPARM
+	VALUES ("750e1811-96be-4210-98f3-0f20b6ce37fd",
+	"71a713f8-a16f-449d-ae9f-8285b56a8b1b",
+	'order',
+	"ba5eda7a-def5-0000-0000-000000000004",
+	0,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	'');
+INSERT INTO O_TFR
+	VALUES ("8b038ddb-1698-467c-9c03-652f1302042a",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	'MeasureEnvironment',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000000",
+	1,
+	'',
+	3,
+	'',
+	"71a713f8-a16f-449d-ae9f-8285b56a8b1b",
+	0,
+	2);
+INSERT INTO O_NBATTR
+	VALUES ("7b2b0dc2-de98-4547-9fdd-d10b3ddccde8",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_BATTR
+	VALUES ("7b2b0dc2-de98-4547-9fdd-d10b3ddccde8",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_ATTR
+	VALUES ("7b2b0dc2-de98-4547-9fdd-d10b3ddccde8",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"00000000-0000-0000-0000-000000000000",
+	'LiefDeviceId',
+	'@iotpnp(deviceid,exclude)',
+	'',
+	'LiefDeviceId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("06cd5902-dbea-43f4-a2d9-192addb54d82",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_BATTR
+	VALUES ("06cd5902-dbea-43f4-a2d9-192addb54d82",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_ATTR
+	VALUES ("06cd5902-dbea-43f4-a2d9-192addb54d82",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"7b2b0dc2-de98-4547-9fdd-d10b3ddccde8",
+	'Environment',
+	'@iotpnp(telemetry)',
+	'',
+	'Environment',
+	0,
+	"a4c3cc91-a5c3-4e0f-8ce3-f4a590f331a9",
+	'',
+	'');
+INSERT INTO S_DT_PROXY
+	VALUES ("a4c3cc91-a5c3-4e0f-8ce3-f4a590f331a9",
+	"00000000-0000-0000-0000-000000000000",
+	'EnvironmentPhysicalQuantities',
+	'',
+	'',
+	'../ADTTestModel.xtuml');
+INSERT INTO O_NBATTR
+	VALUES ("48b872fa-3a47-4568-91e1-5d87fca8a3b2",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_BATTR
+	VALUES ("48b872fa-3a47-4568-91e1-5d87fca8a3b2",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_ATTR
+	VALUES ("48b872fa-3a47-4568-91e1-5d87fca8a3b2",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"06cd5902-dbea-43f4-a2d9-192addb54d82",
+	'Number',
+	'',
+	'',
+	'Number',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_REF
+	VALUES ("6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"b9d246e2-2ced-4679-9c21-c885d2a20b6e",
+	0,
+	"61cbd3c8-f49b-406f-815d-fe05f0728cd4",
+	"ef598959-eb6f-4b6f-b66d-c43035833a57",
+	"d57880a3-3878-4310-a09b-73e699766600",
+	"e16ffb12-a966-44dd-bec4-a00660573676",
+	"677288da-2b81-4524-af8e-7094326c2a3f",
+	"658703ac-d3c0-4fcd-bacb-3e998d62c92d",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'Middle Entity',
+	'MiddleEntityId',
+	'R2');
+INSERT INTO R_RGO_PROXY
+	VALUES ("6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"ef598959-eb6f-4b6f-b66d-c43035833a57",
+	"d57880a3-3878-4310-a09b-73e699766600",
+	'../ADTTestModel.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("61cbd3c8-f49b-406f-815d-fe05f0728cd4",
+	"b9d246e2-2ced-4679-9c21-c885d2a20b6e",
+	0,
+	"ef598959-eb6f-4b6f-b66d-c43035833a57",
+	"e16ffb12-a966-44dd-bec4-a00660573676",
+	'../ADTTestModel.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("677288da-2b81-4524-af8e-7094326c2a3f",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"61cbd3c8-f49b-406f-815d-fe05f0728cd4",
+	"b9d246e2-2ced-4679-9c21-c885d2a20b6e",
+	1,
+	'MiddleEntityId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("61cbd3c8-f49b-406f-815d-fe05f0728cd4",
+	"b9d246e2-2ced-4679-9c21-c885d2a20b6e",
+	'../Middle Entity/Middle Entity.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("677288da-2b81-4524-af8e-7094326c2a3f",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"48b872fa-3a47-4568-91e1-5d87fca8a3b2",
+	'MiddleEntityId',
+	'',
+	'',
+	'MiddleEntityId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1a3bf181-cddc-4aa2-89b3-485e900062c9",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_BATTR
+	VALUES ("1a3bf181-cddc-4aa2-89b3-485e900062c9",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_ATTR
+	VALUES ("1a3bf181-cddc-4aa2-89b3-485e900062c9",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"677288da-2b81-4524-af8e-7094326c2a3f",
+	'RequestInterval',
+	'',
+	'',
+	'RequestInterval',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("d4c5e4fb-9cd9-4c7e-8ac1-3600b9dba6e1",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_BATTR
+	VALUES ("d4c5e4fb-9cd9-4c7e-8ac1-3600b9dba6e1",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_ATTR
+	VALUES ("d4c5e4fb-9cd9-4c7e-8ac1-3600b9dba6e1",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"1a3bf181-cddc-4aa2-89b3-485e900062c9",
+	'CurrentInterval',
+	'@iotpnp(readonly)',
+	'',
+	'CurrentInterval',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("3bf074bb-20b8-4504-ac26-60107950eb87",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_BATTR
+	VALUES ("3bf074bb-20b8-4504-ac26-60107950eb87",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_ATTR
+	VALUES ("3bf074bb-20b8-4504-ac26-60107950eb87",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"d4c5e4fb-9cd9-4c7e-8ac1-3600b9dba6e1",
+	'DeviceStatus',
+	'@iotpnp(readonly)',
+	'',
+	'DeviceStatus',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("c72ca8f7-5f49-4ef1-9706-86080472bc05",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_BATTR
+	VALUES ("c72ca8f7-5f49-4ef1-9706-86080472bc05",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_ATTR
+	VALUES ("c72ca8f7-5f49-4ef1-9706-86080472bc05",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	"3bf074bb-20b8-4504-ac26-60107950eb87",
+	'current_state',
+	'',
+	'',
+	'current_state',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000006",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_OIDA
+	VALUES ("7b2b0dc2-de98-4547-9fdd-d10b3ddccde8",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	0,
+	'LiefDeviceId');
+INSERT INTO O_ID
+	VALUES (1,
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO O_OIDA
+	VALUES ("48b872fa-3a47-4568-91e1-5d87fca8a3b2",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	1,
+	'Number');
+INSERT INTO O_OIDA
+	VALUES ("677288da-2b81-4524-af8e-7094326c2a3f",
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	1,
+	'MiddleEntityId');
+INSERT INTO O_ID
+	VALUES (2,
+	"6938f8d7-0f9f-4032-9df0-e37f086ea344");
+INSERT INTO PE_PE
+	VALUES ("6938f8d7-0f9f-4032-9df0-e37f086ea344",
+	1,
+	"db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	"f9c35d69-d88c-4370-8bf2-12496b4980db",
+	'ADTTestModel',
+	'',
+	0,
+	'../ADTTestModel.xtuml');

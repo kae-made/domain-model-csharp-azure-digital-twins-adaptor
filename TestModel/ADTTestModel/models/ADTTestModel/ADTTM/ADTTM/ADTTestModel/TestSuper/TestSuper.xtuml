@@ -1,0 +1,55 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("d89ac8be-4b14-422d-9b1e-3b316c7ec103",
+	'TestSuper',
+	5,
+	'TS',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_NBATTR
+	VALUES ("c8896bbf-ec47-4637-b7ab-a591c8aa0fea",
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103");
+INSERT INTO O_BATTR
+	VALUES ("c8896bbf-ec47-4637-b7ab-a591c8aa0fea",
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103");
+INSERT INTO O_ATTR
+	VALUES ("c8896bbf-ec47-4637-b7ab-a591c8aa0fea",
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103",
+	"00000000-0000-0000-0000-000000000000",
+	'TSId',
+	'',
+	'',
+	'TSId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103");
+INSERT INTO O_OIDA
+	VALUES ("c8896bbf-ec47-4637-b7ab-a591c8aa0fea",
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103",
+	0,
+	'TSId');
+INSERT INTO O_ID
+	VALUES (1,
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103");
+INSERT INTO O_ID
+	VALUES (2,
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103");
+INSERT INTO PE_PE
+	VALUES ("d89ac8be-4b14-422d-9b1e-3b316c7ec103",
+	1,
+	"db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	"f9c35d69-d88c-4370-8bf2-12496b4980db",
+	'ADTTestModel',
+	'',
+	0,
+	'../ADTTestModel.xtuml');

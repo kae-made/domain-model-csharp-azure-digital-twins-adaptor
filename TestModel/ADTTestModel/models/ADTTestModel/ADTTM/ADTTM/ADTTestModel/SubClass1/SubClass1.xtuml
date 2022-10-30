@@ -1,0 +1,88 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("b440c8a7-1e99-402f-8ba8-505fc0a950f2",
+	'SubClass1',
+	6,
+	'SC1',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_REF
+	VALUES ("b440c8a7-1e99-402f-8ba8-505fc0a950f2",
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103",
+	0,
+	"c8896bbf-ec47-4637-b7ab-a591c8aa0fea",
+	"3e78cdb9-03c1-45fd-8016-70df1160a99d",
+	"c182672f-4b73-4124-aa89-27f2c43ee819",
+	"42b1d4d4-3b3b-4dc1-9f28-40da29b57579",
+	"b730bf73-6dea-459b-8d73-81781f32dc35",
+	"5a1f8e52-5a09-4fcb-82f6-162513ad78d0",
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	'',
+	'TestSuper',
+	'TSId',
+	'R4');
+INSERT INTO R_RGO_PROXY
+	VALUES ("b440c8a7-1e99-402f-8ba8-505fc0a950f2",
+	"3e78cdb9-03c1-45fd-8016-70df1160a99d",
+	"c182672f-4b73-4124-aa89-27f2c43ee819",
+	'../ADTTestModel.xtuml');
+INSERT INTO O_RTIDA_PROXY
+	VALUES ("c8896bbf-ec47-4637-b7ab-a591c8aa0fea",
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103",
+	0,
+	"3e78cdb9-03c1-45fd-8016-70df1160a99d",
+	"42b1d4d4-3b3b-4dc1-9f28-40da29b57579",
+	'../ADTTestModel.xtuml');
+INSERT INTO O_RATTR
+	VALUES ("b730bf73-6dea-459b-8d73-81781f32dc35",
+	"b440c8a7-1e99-402f-8ba8-505fc0a950f2",
+	"c8896bbf-ec47-4637-b7ab-a591c8aa0fea",
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103",
+	1,
+	'TSId');
+INSERT INTO O_BATTR_PROXY
+	VALUES ("c8896bbf-ec47-4637-b7ab-a591c8aa0fea",
+	"d89ac8be-4b14-422d-9b1e-3b316c7ec103",
+	'../TestSuper/TestSuper.xtuml');
+INSERT INTO O_ATTR
+	VALUES ("b730bf73-6dea-459b-8d73-81781f32dc35",
+	"b440c8a7-1e99-402f-8ba8-505fc0a950f2",
+	"00000000-0000-0000-0000-000000000000",
+	'TSId',
+	'',
+	'',
+	'TSId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000007",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"b440c8a7-1e99-402f-8ba8-505fc0a950f2");
+INSERT INTO O_OIDA
+	VALUES ("b730bf73-6dea-459b-8d73-81781f32dc35",
+	"b440c8a7-1e99-402f-8ba8-505fc0a950f2",
+	0,
+	'TSId');
+INSERT INTO O_ID
+	VALUES (1,
+	"b440c8a7-1e99-402f-8ba8-505fc0a950f2");
+INSERT INTO O_ID
+	VALUES (2,
+	"b440c8a7-1e99-402f-8ba8-505fc0a950f2");
+INSERT INTO PE_PE
+	VALUES ("b440c8a7-1e99-402f-8ba8-505fc0a950f2",
+	1,
+	"db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	"f9c35d69-d88c-4370-8bf2-12496b4980db",
+	'ADTTestModel',
+	'',
+	0,
+	'../ADTTestModel.xtuml');

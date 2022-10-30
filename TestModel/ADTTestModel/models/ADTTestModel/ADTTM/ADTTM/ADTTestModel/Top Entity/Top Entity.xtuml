@@ -1,0 +1,128 @@
+-- BP 7.1.6 content: ModelClass syschar: 3 persistence-version: 7.1.6
+
+INSERT INTO O_OBJ
+	VALUES ("259f4456-9ac2-41c5-add3-a05dd80d0c57",
+	'Top Entity',
+	1,
+	'TE',
+	'',
+	"00000000-0000-0000-0000-000000000000");
+INSERT INTO O_TFR
+	VALUES ("067f55f5-39a6-48a1-becc-6800b7ae181f",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57",
+	'GetNumberOfLiefDevices',
+	'',
+	"ba5eda7a-def5-0000-0000-000000000002",
+	1,
+	'numOfLD = 0;
+SELECT MANY mdSet RELATED BY SELF->ME[R1.''child''];
+FOR EACH md IN mdSet
+	SELECT MANY ldSet RELATED BY md->LD[R2.''measurement''];
+	numOfLD = numOfLD + CARDINALITY ldSet;
+END FOR;
+RETURN numOfLD;',
+	1,
+	'',
+	"00000000-0000-0000-0000-000000000000",
+	0,
+	1);
+INSERT INTO O_NBATTR
+	VALUES ("9f3e9730-2ac9-426c-9ce5-1e9ca4c32233",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_BATTR
+	VALUES ("9f3e9730-2ac9-426c-9ce5-1e9ca4c32233",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_ATTR
+	VALUES ("9f3e9730-2ac9-426c-9ce5-1e9ca4c32233",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57",
+	"00000000-0000-0000-0000-000000000000",
+	'TopEntityId',
+	'',
+	'',
+	'TopEntityId',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000005",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("1c471b3a-b15a-4151-9899-0888aa0f5395",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_BATTR
+	VALUES ("1c471b3a-b15a-4151-9899-0888aa0f5395",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_ATTR
+	VALUES ("1c471b3a-b15a-4151-9899-0888aa0f5395",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57",
+	"9f3e9730-2ac9-426c-9ce5-1e9ca4c32233",
+	'X',
+	'',
+	'',
+	'X',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("b5f6fdbe-98e5-4d30-b40b-0447a4f42ec1",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_BATTR
+	VALUES ("b5f6fdbe-98e5-4d30-b40b-0447a4f42ec1",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_ATTR
+	VALUES ("b5f6fdbe-98e5-4d30-b40b-0447a4f42ec1",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57",
+	"1c471b3a-b15a-4151-9899-0888aa0f5395",
+	'S',
+	'',
+	'',
+	'S',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000004",
+	'',
+	'');
+INSERT INTO O_NBATTR
+	VALUES ("6b2e1814-ee29-4910-96c6-cd32df50fef3",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_BATTR
+	VALUES ("6b2e1814-ee29-4910-96c6-cd32df50fef3",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_ATTR
+	VALUES ("6b2e1814-ee29-4910-96c6-cd32df50fef3",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57",
+	"b5f6fdbe-98e5-4d30-b40b-0447a4f42ec1",
+	'TestInterval',
+	'',
+	'',
+	'TestInterval',
+	0,
+	"ba5eda7a-def5-0000-0000-000000000002",
+	'',
+	'');
+INSERT INTO O_ID
+	VALUES (0,
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_OIDA
+	VALUES ("9f3e9730-2ac9-426c-9ce5-1e9ca4c32233",
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57",
+	0,
+	'TopEntityId');
+INSERT INTO O_ID
+	VALUES (1,
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO O_ID
+	VALUES (2,
+	"259f4456-9ac2-41c5-add3-a05dd80d0c57");
+INSERT INTO PE_PE
+	VALUES ("259f4456-9ac2-41c5-add3-a05dd80d0c57",
+	1,
+	"db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	4);
+INSERT INTO EP_PKG_PROXY
+	VALUES ("db4cdfa6-8291-4127-a852-8c38adeced09",
+	"00000000-0000-0000-0000-000000000000",
+	"f9c35d69-d88c-4370-8bf2-12496b4980db",
+	'ADTTestModel',
+	'',
+	0,
+	'../ADTTestModel.xtuml');
