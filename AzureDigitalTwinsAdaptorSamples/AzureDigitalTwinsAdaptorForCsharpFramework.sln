@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32929.385
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kae.DomainModel.CSharp.Utility.Application.AzureDigitalTwinsFunction", "AzureDigitalTwinsAdaptorForCsharpFramework\Kae.DomainModel.CSharp.Utility.Application.AzureDigitalTwinsFunction.csproj", "{3D4C1A66-1AC3-47E7-B7D6-852BDC8A0D62}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kae.DomainModel.CSharp.Utility.Application.AzureDigitalTwinsFunction", "AzureDigitalTwinsAdaptorForCsharpFramework\Kae.DomainModel.CSharp.Utility.Application.AzureDigitalTwinsFunction.csproj", "{3D4C1A66-1AC3-47E7-B7D6-852BDC8A0D62}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADTTestModel", "ADTTestModel\ADTTestModel.csproj", "{6274DD22-6DA3-4132-9B08-B86B2F07E02D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder", "Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder\Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder.csproj", "{4382FF4F-6891-4C2A-96B2-4115AF43D3AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{6274DD22-6DA3-4132-9B08-B86B2F07E02D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6274DD22-6DA3-4132-9B08-B86B2F07E02D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6274DD22-6DA3-4132-9B08-B86B2F07E02D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4382FF4F-6891-4C2A-96B2-4115AF43D3AB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4382FF4F-6891-4C2A-96B2-4115AF43D3AB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4382FF4F-6891-4C2A-96B2-4115AF43D3AB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4382FF4F-6891-4C2A-96B2-4115AF43D3AB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
