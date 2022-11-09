@@ -1,0 +1,15 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:ADTTestModel:TS;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "TestSuper",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "TSId",
+      "schema": "string",
+      "comment": "@I0,PR4FromSC2,PR4FromSC1"
+    }
+  ]
+}

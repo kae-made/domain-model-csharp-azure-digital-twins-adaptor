@@ -1,0 +1,22 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:ADTTestModel:SC2;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "SubClass2",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "TSId",
+      "schema": "string",
+      "comment": "@I0,R4"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:ADTTestModel:R4FromSC2;1",
+      "name": "R4FromSC2",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:ADTTestModel:TS;1"
+    }
+  ]
+}

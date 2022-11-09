@@ -1,0 +1,41 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:ADTTestModel:OOD;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Order of Device",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "OodId",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "left_LiefDeviceId",
+      "schema": "string",
+      "comment": "@I1,R3"
+    },
+    {
+      "@type": "Property",
+      "name": "right_LiefDeviceId",
+      "schema": "string",
+      "comment": "@I1,R3"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:ADTTestModel:R3_Right_LD;1",
+      "name": "R3_Right_LD",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:ADTTestModel:LD;1"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:ADTTestModel:R3_Left_LD;1",
+      "name": "R3_Left_LD",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:ADTTestModel:LD;1"
+    }
+  ]
+}

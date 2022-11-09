@@ -1,0 +1,51 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:ADTTestModel:TE;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Top Entity",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "TopEntityId",
+      "schema": "string",
+      "comment": "@I0,PR1_TE"
+    },
+    {
+      "@type": "Property",
+      "name": "X",
+      "schema": "integer"
+    },
+    {
+      "@type": "Property",
+      "name": "S",
+      "schema": "string"
+    },
+    {
+      "@type": "Property",
+      "name": "TestInterval",
+      "schema": "integer"
+    },
+    {
+      "@type": "Command",
+      "name": "GetNumberOfLiefDevices",
+      "response": {
+        "name": "payload",
+        "schema": {
+          "@type": "Object",
+          "fields": [
+            {
+              "name": "result",
+              "schema": "integer"
+            },
+            {
+              "name": "status",
+              "schema": "integer"
+            }
+          ]
+        }
+      },
+      "displayName": "GetNumberOfLiefDevices"
+    }
+  ]
+}

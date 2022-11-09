@@ -1,0 +1,41 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:ADTTestModel:MML;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Mapping Middel To Lief",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "MMLId",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "MiddleEntityId",
+      "schema": "string",
+      "comment": "@I1,R5"
+    },
+    {
+      "@type": "Property",
+      "name": "LiefDeviceId",
+      "schema": "string",
+      "comment": "@I1,R5"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:ADTTestModel:R5_Middle_ME;1",
+      "name": "R5_Middle_ME",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:ADTTestModel:ME;1"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:ADTTestModel:R5_Lief_LD;1",
+      "name": "R5_Lief_LD",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:ADTTestModel:LD;1"
+    }
+  ]
+}

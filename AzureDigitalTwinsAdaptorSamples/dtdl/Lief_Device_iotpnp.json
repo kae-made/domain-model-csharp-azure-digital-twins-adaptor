@@ -1,0 +1,114 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:ADTTestModel:LD:iotpnp;1",
+  "@type": "Interface",
+  "comment": "target-dtdlid='dtmi:com:kae_made:ADTTestModel:LD;1'\\nauto generated - generator version=0.0.1",
+  "displayName": "Lief Device",
+  "description": "Please see description of class:'Lief Device'",
+  "contents": [
+    {
+      "@type": "Telemetry",
+      "name": "Environment",
+      "schema": {
+        "@type": "Object",
+        "displayName": "EnvironmentPhysicalQuantities",
+        "fields": [
+          {
+            "name": "Temperature",
+            "schema": "double"
+          },
+          {
+            "name": "Humidity",
+            "schema": "double"
+          },
+          {
+            "name": "AtmosphericPressure",
+            "schema": "double"
+          },
+          {
+            "name": "CO2Concentration",
+            "schema": "double"
+          },
+          {
+            "name": "Brightness",
+            "schema": "double"
+          },
+          {
+            "name": "Timestamp",
+            "schema": "dateTime"
+          }
+        ]
+      },
+      "description": "Please see description of attribute:'Environment' of class:'Lief Device'"
+    },
+    {
+      "@type": "Property",
+      "name": "Number",
+      "schema": "integer",
+      "comment": "@I1"
+    },
+    {
+      "@type": "Property",
+      "name": "RequestInterval",
+      "schema": "integer"
+    },
+    {
+      "@type": "Property",
+      "name": "CurrentInterval",
+      "writable": false,
+      "schema": "integer",
+      "description": "Please see description of attribute:'CurrentInterval' of class:'Lief Device'"
+    },
+    {
+      "@type": "Property",
+      "name": "DeviceStatus",
+      "writable": false,
+      "schema": "string",
+      "description": "Please see description of attribute:'DeviceStatus' of class:'Lief Device'"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "LD_1_Measure",
+      "displayName": "LD1:Measure",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "LD_2_Measured",
+      "displayName": "LD2:Measured",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Command",
+      "name": "Command",
+      "request": {
+        "name": "payload",
+        "schema": {
+          "@type": "Object",
+          "fields": [
+            {
+              "name": "order",
+              "schema": "string"
+            }
+          ]
+        }
+      },
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "Command"
+    },
+    {
+      "@type": "Command",
+      "name": "MeasureEnvironment",
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "MeasureEnvironment"
+    }
+  ]
+}

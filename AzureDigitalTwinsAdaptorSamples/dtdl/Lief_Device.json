@@ -1,0 +1,139 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:ADTTestModel:LD;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Lief Device",
+  "description": "Please see description of class:'Lief Device'",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "LiefDeviceId",
+      "schema": "string",
+      "comment": "@I0,PR3_Right_LD,PR3_Left_LD,PR5_Lief_LD,PR6_Target_LD,@deviceid",
+      "description": "Please see description of attribute:'LiefDeviceId' of class:'Lief Device'"
+    },
+    {
+      "@type": "Property",
+      "name": "Environment",
+      "schema": {
+        "@type": "Object",
+        "displayName": "EnvironmentPhysicalQuantities",
+        "fields": [
+          {
+            "name": "Temperature",
+            "schema": "double"
+          },
+          {
+            "name": "Humidity",
+            "schema": "double"
+          },
+          {
+            "name": "AtmosphericPressure",
+            "schema": "double"
+          },
+          {
+            "name": "CO2Concentration",
+            "schema": "double"
+          },
+          {
+            "name": "Brightness",
+            "schema": "double"
+          },
+          {
+            "name": "Timestamp",
+            "schema": "dateTime"
+          }
+        ]
+      },
+      "description": "Please see description of attribute:'Environment' of class:'Lief Device'"
+    },
+    {
+      "@type": "Property",
+      "name": "Number",
+      "schema": "integer",
+      "comment": "@I1"
+    },
+    {
+      "@type": "Property",
+      "name": "MiddleEntityId",
+      "schema": "string",
+      "comment": "@I1,R2",
+      "description": "Please see description of attribute:'MiddleEntityId' of class:'Lief Device'"
+    },
+    {
+      "@type": "Property",
+      "name": "RequestInterval",
+      "schema": "integer"
+    },
+    {
+      "@type": "Property",
+      "name": "CurrentInterval",
+      "schema": "integer",
+      "description": "Please see description of attribute:'CurrentInterval' of class:'Lief Device'"
+    },
+    {
+      "@type": "Property",
+      "name": "DeviceStatus",
+      "schema": "string",
+      "description": "Please see description of attribute:'DeviceStatus' of class:'Lief Device'"
+    },
+    {
+      "@type": "Property",
+      "name": "current_state",
+      "schema": "string",
+      "description": "Please see description of attribute:'current_state' of class:'Lief Device'"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "LD_1_Measure",
+      "displayName": "LD1:Measure",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "LD_2_Measured",
+      "displayName": "LD2:Measured",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Command",
+      "name": "Command",
+      "request": {
+        "name": "payload",
+        "schema": {
+          "@type": "Object",
+          "fields": [
+            {
+              "name": "order",
+              "schema": "string"
+            }
+          ]
+        }
+      },
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "Command"
+    },
+    {
+      "@type": "Command",
+      "name": "MeasureEnvironment",
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "MeasureEnvironment"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:ADTTestModel:R2_ME;1",
+      "name": "R2_ME",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:ADTTestModel:ME;1"
+    }
+  ]
+}

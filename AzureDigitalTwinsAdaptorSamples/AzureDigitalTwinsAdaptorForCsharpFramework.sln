@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kae.DomainModel.CSharp.Util
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ADTTestModel", "ADTTestModel\ADTTestModel.csproj", "{6274DD22-6DA3-4132-9B08-B86B2F07E02D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder", "Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder\Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder.csproj", "{4382FF4F-6891-4C2A-96B2-4115AF43D3AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder", "Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder\Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder.csproj", "{4382FF4F-6891-4C2A-96B2-4115AF43D3AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

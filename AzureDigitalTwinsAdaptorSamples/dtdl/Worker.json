@@ -1,0 +1,64 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:ADTTestModel:W;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Worker",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "WId",
+      "schema": "string",
+      "comment": "@I0"
+    },
+    {
+      "@type": "Property",
+      "name": "current_state",
+      "schema": "string"
+    },
+    {
+      "@type": "Property",
+      "name": "LiefDeviceId",
+      "schema": "string",
+      "comment": "@R6"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "W_1_Create",
+      "displayName": "W1:Create",
+      "schema": {
+        "@type": "Object",
+        "fields": [
+          {
+            "name": "targetId",
+            "schema": "string"
+          },
+          {
+            "name": "W_1_Create_occurred",
+            "description": "The timestamp when this telemetry occurres",
+            "schema": "dateTime"
+          }
+        ]
+      }
+    },
+    {
+      "@type": "Telemetry",
+      "name": "W_2_Start",
+      "displayName": "W2:Start",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Telemetry",
+      "name": "W_3_Done",
+      "displayName": "W3:Done",
+      "schema": "dateTime"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:ADTTestModel:R6_Target_LD;1",
+      "name": "R6_Target_LD",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:ADTTestModel:LD;1"
+    }
+  ]
+}

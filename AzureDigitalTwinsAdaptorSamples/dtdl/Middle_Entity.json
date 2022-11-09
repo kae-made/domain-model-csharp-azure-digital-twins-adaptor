@@ -1,0 +1,65 @@
+{
+  "@context": "dtmi:dtdl:context;2",
+  "@id": "dtmi:com:kae_made:ADTTestModel:ME;1",
+  "@type": "Interface",
+  "comment": "auto generated - generator version=0.0.1",
+  "displayName": "Middle Entity",
+  "contents": [
+    {
+      "@type": "Property",
+      "name": "MiddleEntityId",
+      "schema": "string",
+      "comment": "@I0,PR2_ME,PR5_Middle_ME"
+    },
+    {
+      "@type": "Property",
+      "name": "TopEntityId",
+      "schema": "string",
+      "comment": "@R1"
+    },
+    {
+      "@type": "Property",
+      "name": "Comfortable",
+      "schema": "boolean"
+    },
+    {
+      "@type": "Property",
+      "name": "PreferredTemperature",
+      "schema": "integer"
+    },
+    {
+      "@type": "Property",
+      "name": "PreferredHumidity",
+      "schema": "integer"
+    },
+    {
+      "@type": "Command",
+      "name": "Command",
+      "request": {
+        "name": "payload",
+        "schema": {
+          "@type": "Object",
+          "fields": [
+            {
+              "name": "order",
+              "schema": "string"
+            }
+          ]
+        }
+      },
+      "response": {
+        "name": "status",
+        "schema": "integer",
+        "description": "HTTP response status code."
+      },
+      "displayName": "Command"
+    },
+    {
+      "@type": "Relationship",
+      "@id": "dtmi:com:kae_made:ADTTestModel:R1_TE;1",
+      "name": "R1_TE",
+      "maxMultiplicity": 1,
+      "target": "dtmi:com:kae_made:ADTTestModel:TE;1"
+    }
+  ]
+}
