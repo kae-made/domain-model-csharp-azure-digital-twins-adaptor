@@ -27,12 +27,12 @@ namespace ADTTestModel.Adaptor
             { "OOD", "dtmi:com:kae_made:ADTTestModel:OOD;1" },
             { "TS", "dtmi:com:kae_made:ADTTestModel:TS;1" },
             { "TE", "dtmi:com:kae_made:ADTTestModel:TE;1" },
+            { "W", "dtmi:com:kae_made:ADTTestModel:W;1" },
             { "SC2", "dtmi:com:kae_made:ADTTestModel:SC2;1" },
             { "SC1", "dtmi:com:kae_made:ADTTestModel:SC1;1" },
             { "ME", "dtmi:com:kae_made:ADTTestModel:ME;1" },
-            { "LD", "dtmi:com:kae_made:ADTTestModel:LD;1" },
             { "MML", "dtmi:com:kae_made:ADTTestModel:MML;1" },
-            { "W", "dtmi:com:kae_made:ADTTestModel:W;1" }
+            { "LD", "dtmi:com:kae_made:ADTTestModel:LD;1" }
         };
 
         Dictionary<string, DTDLRelationshipDef> cRelationshipToTwinRelationships = new Dictionary<string, DTDLRelationshipDef>()
@@ -44,7 +44,8 @@ namespace ADTTestModel.Adaptor
             { "R4_SC1", new DTDLRelationshipDef() { Id="dtmi:com:kae_made:ADTTestModel:R4FromSC1;1", Name="R4FromSC1", SourceTwinModelId="dtmi:com:kae_made:ADTTestModel:SC1;1", TargetTwinModelId="dtmi:com:kae_made:ADTTestModel:TS;1", FormClassKeyLetter="SC1", PartClassKeyLetter="TS" } },
             { "R4_SC2", new DTDLRelationshipDef() { Id="dtmi:com:kae_made:ADTTestModel:R4FromSC2;1", Name="R4FromSC2", SourceTwinModelId="dtmi:com:kae_made:ADTTestModel:SC2;1", TargetTwinModelId="dtmi:com:kae_made:ADTTestModel:TS;1", FormClassKeyLetter="SC2", PartClassKeyLetter="TS" } },
             { "R5_Middle", new DTDLRelationshipDef() { Id="dtmi:com:kae_made:ADTTestModel:R5_Middle_ME;1", Name="R5_Middle_ME", SourceTwinModelId="dtmi:com:kae_made:ADTTestModel:MML;1", TargetTwinModelId="dtmi:com:kae_made:ADTTestModel:ME;1", FormClassKeyLetter="MML", PartClassKeyLetter="ME" } },
-            { "R5_Lief", new DTDLRelationshipDef() { Id="dtmi:com:kae_made:ADTTestModel:R5_Lief_LD;1", Name="R5_Lief_LD", SourceTwinModelId="dtmi:com:kae_made:ADTTestModel:MML;1", TargetTwinModelId="dtmi:com:kae_made:ADTTestModel:LD;1", FormClassKeyLetter="MML", PartClassKeyLetter="LD" } }
+            { "R5_Lief", new DTDLRelationshipDef() { Id="dtmi:com:kae_made:ADTTestModel:R5_Lief_LD;1", Name="R5_Lief_LD", SourceTwinModelId="dtmi:com:kae_made:ADTTestModel:MML;1", TargetTwinModelId="dtmi:com:kae_made:ADTTestModel:LD;1", FormClassKeyLetter="MML", PartClassKeyLetter="LD" } },
+            { "R6", new DTDLRelationshipDef() { Id="dtmi:com:kae_made:ADTTestModel:R6_LD;1", Name="R6_LD", SourceTwinModelId="dtmi:com:kae_made:ADTTestModel:W;1", TargetTwinModelId="dtmi:com:kae_made:ADTTestModel:LD;1", FormClassKeyLetter="W", PartClassKeyLetter="LD" } }
         };
 
         public ADTTestModelAzureDigitalTwinsAdaptor(string adtInstanceUrl, TokenCredential credential, InstanceRepository repository, Logger logger) : base(adtInstanceUrl, credential, repository, logger)

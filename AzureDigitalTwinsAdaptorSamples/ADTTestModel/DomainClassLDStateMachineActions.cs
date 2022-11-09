@@ -34,7 +34,7 @@ namespace ADTTestModel
             // Line : 1
             target.MeasureEnvironment();
             // Line : 2
-            DomainClassLDStateMachine.LD2_Measured.Create(receiver:target, sendNow:true);
+            DomainClassLDStateMachine.LD_2_Measured.Create(receiver:target, isSelfEvent:true, sendNow:true);
 
 
         }

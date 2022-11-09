@@ -20,8 +20,8 @@ namespace ADTTestModel
     {
         public enum Events
         {
-            LD1 = 0,     // Measure
-            LD2 = 1    // Measured
+            LD_1 = 0,     // Measure
+            LD_2 = 1    // Measured
         }
 
         public enum States
@@ -31,11 +31,11 @@ namespace ADTTestModel
             Measured = 2
         }
 
-        public class LD1_Measure : EventData
+        public class LD_1_Measure : EventData
         {
             DomainClassLD reciever;
 
-            public LD1_Measure(DomainClassLD reciever) : base((int)Events.LD1)
+            public LD_1_Measure(DomainClassLD reciever) : base("LD_1_Measure", (int)Events.LD_1)
             {
                 this.reciever = reciever;
             }
@@ -45,14 +45,14 @@ namespace ADTTestModel
                 reciever.TakeEvent(this);
             }
 
-            public static LD1_Measure Create(DomainClassLD receiver, bool sendNow)
+            public static LD_1_Measure Create(DomainClassLD receiver, bool isSelfEvent, bool sendNow)
             {
-                var newEvent = new LD1_Measure(receiver);
+                var newEvent = new LD_1_Measure(receiver);
                 if (receiver != null)
                 {
                     if (sendNow)
                     {
-                        receiver.TakeEvent(newEvent);
+                        receiver.TakeEvent(newEvent, isSelfEvent);
                     }
                 }
                 else
@@ -64,14 +64,22 @@ namespace ADTTestModel
                 }
 
                 return newEvent;
+            }
+
+            public override IDictionary<string, object> GetSupplementalData()
+            {
+                var supplementalData = new Dictionary<string, object>();
+
+
+                return supplementalData;
             }
         }
 
-        public class LD2_Measured : EventData
+        public class LD_2_Measured : EventData
         {
             DomainClassLD reciever;
 
-            public LD2_Measured(DomainClassLD reciever) : base((int)Events.LD2)
+            public LD_2_Measured(DomainClassLD reciever) : base("LD_2_Measured", (int)Events.LD_2)
             {
                 this.reciever = reciever;
             }
@@ -81,14 +89,14 @@ namespace ADTTestModel
                 reciever.TakeEvent(this);
             }
 
-            public static LD2_Measured Create(DomainClassLD receiver, bool sendNow)
+            public static LD_2_Measured Create(DomainClassLD receiver, bool isSelfEvent, bool sendNow)
             {
-                var newEvent = new LD2_Measured(receiver);
+                var newEvent = new LD_2_Measured(receiver);
                 if (receiver != null)
                 {
                     if (sendNow)
                     {
-                        receiver.TakeEvent(newEvent);
+                        receiver.TakeEvent(newEvent, isSelfEvent);
                     }
                 }
                 else
@@ -100,6 +108,14 @@ namespace ADTTestModel
                 }
 
                 return newEvent;
+            }
+
+            public override IDictionary<string, object> GetSupplementalData()
+            {
+                var supplementalData = new Dictionary<string, object>();
+
+
+                return supplementalData;
             }
         }
 
@@ -107,7 +123,10 @@ namespace ADTTestModel
 
         protected InstanceRepository instanceRepository;
 
-        public DomainClassLDStateMachine(DomainClassLD target, InstanceRepository instanceRepository, Logger logger) : base(1, logger)
+        protected string DomainName { get { return target.DomainName; } }
+
+        // Constructor
+        public DomainClassLDStateMachine(DomainClassLD target, bool synchronousMode, InstanceRepository instanceRepository, Logger logger) : base(1, synchronousMode, logger)
         {
             this.target = target;
             this.stateTransition = this;

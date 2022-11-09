@@ -16,19 +16,20 @@ namespace Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage.AzureDigitalT
     public abstract class AzureDigitalTwinsAdaptor : IExternalStorageAdaptor
     {
         protected DigitalTwinsClient adtClient = null;
-        protected InstanceRepository instanceRepository;
+        protected IExternalStorageAdaptable instanceRepository;
         protected Logger logger;
         protected string adtInstanceUrl;
         protected TokenCredential credential;
 
 
-        public AzureDigitalTwinsAdaptor(string adtInstanceUrl, TokenCredential credential, InstanceRepository repository, Logger logger)
+        public AzureDigitalTwinsAdaptor(string adtInstanceUrl, TokenCredential credential, IExternalStorageAdaptable repository, Logger logger)
         {
             this.instanceRepository = repository;
             this.logger = logger;
             this.adtInstanceUrl = adtInstanceUrl;
             this.credential = credential;
         }
+
         public async void Initialize()
         {
             //var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build();
@@ -38,6 +39,7 @@ namespace Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage.AzureDigitalT
 
             instanceRepository.AddCInstanceChangedStateNotifyHandler(CInstanceChangedStateNotified);
             instanceRepository.AddCLinkChangedStateNotifyHandler(CLinkChangedStateNotified);
+            instanceRepository.AddCEventChangedStateNotifyHandler(CEventChangedStateNotified);
 
 #if false
             string query = "SELECT * FROM DIGITALTWINS WHERE IS_OF_MODEL('dtmi:com:kae_made:ADTTestModel:TE;1')";
@@ -53,6 +55,11 @@ namespace Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage.AzureDigitalT
                 //
             }
 #endif
+        }
+
+        public bool DoseEventComeFromExternal()
+        {
+            return true;
         }
 
         protected async void CLinkChangedStateNotified(CLinkChangedState changedState)
@@ -133,6 +140,24 @@ namespace Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage.AzureDigitalT
             }
         }
 
+        protected async void CEventChangedStateNotified(CEventChangedState changedState)
+        {
+            try
+            {
+                string msgId = Guid.NewGuid().ToString();
+                var eventContent = new Dictionary<string, object>()
+                {
+                    { changedState.Event.EventName , changedState.Event.GetSupplementalData() }
+                };
+                string payload = Newtonsoft.Json.JsonConvert.SerializeObject(eventContent);
+                await adtClient.PublishTelemetryAsync(changedState.Target.GetIdForExternalStorage(), msgId, payload);
+                logger.LogInfo($"Published Telemetry:messageId={msgId}");
+            }
+            catch (Exception ex)
+            {
+                logger.LogError(ex.Message);
+            }
+        }
 
         public async Task<IEnumerable<DomainClassDef>> CheckInstanceStatus(string domainName, string classKeyLetter, IEnumerable<DomainClassDef> existingInstances, Func<string> query, Func<DomainClassDef> create, string cardinarity)
         {
@@ -325,6 +350,10 @@ namespace Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage.AzureDigitalT
             }
         }
 
+        public async void EventUpdater(string classKeyLetter, DomainClassDef instance, string eventLabel, IDictionary<string, object> supplimentalData)
+        {
+            logger.LogInfo("Called Event Updater)");
+        }
 
         protected static object ResolveContent(JsonElement jcontent)
         {
@@ -469,5 +498,6 @@ namespace Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage.AzureDigitalT
             instanceRepository.ClearAllInstances(domainName);
             logger.LogInfo("Cache cleared");
         }
+
     }
 }

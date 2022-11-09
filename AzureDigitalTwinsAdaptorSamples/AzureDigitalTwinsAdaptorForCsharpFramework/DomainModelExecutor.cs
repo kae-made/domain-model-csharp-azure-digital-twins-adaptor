@@ -10,9 +10,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Kae.DomainModel.Csharp.Framework.Adaptor;
-using ADTTestModel.Adaptor;
 using Microsoft.Extensions.Configuration;
-using Azure.Identity;
 using System.Web.Http;
 
 namespace Kae.DomainModel.CSharp.Utility.Application.AzureDigitalTwinsFunction
@@ -27,18 +25,12 @@ namespace Kae.DomainModel.CSharp.Utility.Application.AzureDigitalTwinsFunction
             ILogger log)
         {
             log.LogInformation("C# HTTP trigger function processed a request.");
-
             if (domainModelAdaptor == null)
             {
+                var configuration = new ConfigurationBuilder().AddJsonFile("local.settings.json", true).AddEnvironmentVariables().Build();
                 try
                 {
-                    var configuration = new ConfigurationBuilder().AddJsonFile("local.settings.json", true).AddEnvironmentVariables().Build();
-                    string adtUrl = configuration.GetConnectionString("ADT");
-                    DomainModelAdaptorEntry.Configuration.Add("ADTInstanceUri", adtUrl);
-                    var credential = new DefaultAzureCredential();
-                    DomainModelAdaptorEntry.Configuration.Add("ADTCredential", credential);
-                    domainModelAdaptor = DomainModelAdaptorEntry.GetAdaptor(new WebAPILogger(log));
-                    log.LogInformation("Domain Model Adaptoer has been initialized.");
+                    domainModelAdaptor = DomainAdaptorHelper.GetDomainAdaptor(configuration, log);
                 }
                 catch (Exception ex)
                 {

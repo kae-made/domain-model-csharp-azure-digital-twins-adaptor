@@ -28,11 +28,11 @@ namespace ADTTestModel
         protected Logger logger;
 
 
-        public string GetIdForExternalStorage() {  return attr_TSId; }
+        public string GetIdForExternalStorage() {  return $"TSId={attr_TSId}"; }
 
-        public static DomainClassTSBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
+        public static DomainClassTSBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null, bool synchronousMode = false)
         {
-            var newInstance = new DomainClassTSBase(instanceRepository, logger);
+            var newInstance = new DomainClassTSBase(instanceRepository, logger, synchronousMode);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:TS(TSId={newInstance.Attr_TSId}):create");
 
             instanceRepository.Add(newInstance);
@@ -42,7 +42,7 @@ namespace ADTTestModel
             return newInstance;
         }
 
-        public DomainClassTSBase(InstanceRepository instanceRepository, Logger logger)
+        public DomainClassTSBase(InstanceRepository instanceRepository, Logger logger, bool synchronousMode)
         {
             this.instanceRepository = instanceRepository;
             this.logger = logger;

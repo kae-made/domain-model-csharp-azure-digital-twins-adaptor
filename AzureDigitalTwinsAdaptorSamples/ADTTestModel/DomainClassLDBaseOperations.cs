@@ -20,24 +20,47 @@ namespace ADTTestModel
         {
             // TODO : Let's write code!
             // Action Description on Model as a reference
+            var invokeParams = new {
+                order = order
+            };
+            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(invokeParams);
+            var resultOfInvocation = azureIoTHubWrapper.InvokeOperation("Command", payload, Attr_LiefDeviceId).Result;
+            int statusOfInvocationResult = resultOfInvocation.status;
+            logger?.LogInfo($"Result of Command invocation for '{Attr_LiefDeviceId}' status - '{statusOfInvocationResult}'");
 
-            var changedStates = new List<ChangedState>();
-            // Generated from action description
-
-        
-            instanceRepository.SyncChangedStates(changedStates);
         }
 
         public void MeasureEnvironment()
         {
             // TODO : Let's write code!
             // Action Description on Model as a reference
+            string payload = "{}";
+            var resultOfInvocation = azureIoTHubWrapper.InvokeOperation("MeasureEnvironment", payload, Attr_LiefDeviceId).Result;
+            int statusOfInvocationResult = resultOfInvocation.status;
+            logger?.LogInfo($"Result of MeasureEnvironment invocation for '{Attr_LiefDeviceId}' status - '{statusOfInvocationResult}'");
 
-            var changedStates = new List<ChangedState>();
-            // Generated from action description
+        }
 
-        
-            instanceRepository.SyncChangedStates(changedStates);
+        public string CommandWithResult(int mode, string operation)
+        {
+            // TODO : Let's write code!
+            // Action Description on Model as a reference
+            //  1 : result = "";
+            //  2 : 
+            //  3 : return result;
+            var invokeParams = new {
+                mode = mode,
+                operation = operation
+            };
+            string payload = Newtonsoft.Json.JsonConvert.SerializeObject(invokeParams);
+            var resultOfInvocation = azureIoTHubWrapper.InvokeOperation("CommandWithResult", payload, Attr_LiefDeviceId).Result;
+            int statusOfInvocationResult = resultOfInvocation.status;
+            logger?.LogInfo($"Result of CommandWithResult invocation for '{Attr_LiefDeviceId}' status - '{statusOfInvocationResult}'");
+
+
+            string payloadOfInvicationResult = resultOfInvocation.resultPayload;
+            dynamic resultPayload = Newtonsoft.Json.JsonConvert.DeserializeObject(payloadOfInvicationResult);
+            return resultPayload.result;
         }
 
 

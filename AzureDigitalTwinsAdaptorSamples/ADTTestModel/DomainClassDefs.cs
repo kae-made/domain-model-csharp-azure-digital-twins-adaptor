@@ -85,6 +85,34 @@ namespace ADTTestModel
 
     }
 
+    public interface DomainClassW : DomainClassDef
+    {
+        // Conceptual Information Class's Properties
+
+        string Attr_WId { get; }
+        int Attr_current_state { get; }
+        string Attr_LiefDeviceId { get; }
+
+
+        // State Machine
+
+        void TakeEvent(EventData domainEvent, bool selfEvent=false);
+
+        // Relationships 
+
+        public DomainClassLD LinkedR6Target();
+
+        public bool LinkR6Target(DomainClassLD instance, IList<ChangedState> changedStates=null);
+
+        public bool UnlinkR6Target(DomainClassLD instance, IList<ChangedState> changedStates=null);
+
+
+        // Conceptual Information Class's Operations
+
+
+
+    }
+
     public interface DomainClassSC2 : DomainClassDef, SubClassR4
     {
         // Conceptual Information Class's Properties
@@ -154,6 +182,29 @@ namespace ADTTestModel
 
     }
 
+    public interface DomainClassMML : DomainClassDef
+    {
+        // Conceptual Information Class's Properties
+
+        string Attr_MMLId { get; }
+        string Attr_MiddleEntityId { get; }
+        string Attr_LiefDeviceId { get; }
+
+
+        // Relationships 
+
+        public bool LinkR5(DomainClassME oneInstanceMiddle, DomainClassLD otherInstanceLief, IList<ChangedState> changedStates=null);
+        public bool UnlinkR5(DomainClassME oneInstanceMiddle, DomainClassLD otherInstanceLief, IList<ChangedState> changedStates=null);
+        public DomainClassME LinkedR5OneMiddle();
+        public DomainClassLD LinkedR5OtherLief();
+
+
+        // Conceptual Information Class's Operations
+
+
+
+    }
+
     public interface DomainClassLD : DomainClassDef
     {
         // Conceptual Information Class's Properties
@@ -184,6 +235,7 @@ namespace ADTTestModel
         public DomainClassOOD LinkedR3OneRight();
 
         public DomainClassMML LinkedR5OneMiddle();
+        public DomainClassW LinkedR6();
 
 
         // Conceptual Information Class's Operations
@@ -192,50 +244,7 @@ namespace ADTTestModel
 
         public void MeasureEnvironment();
 
-
-
-    }
-
-    public interface DomainClassMML : DomainClassDef
-    {
-        // Conceptual Information Class's Properties
-
-        string Attr_MMLId { get; }
-        string Attr_MiddleEntityId { get; }
-        string Attr_LiefDeviceId { get; }
-
-
-        // Relationships 
-
-        public bool LinkR5(DomainClassME oneInstanceMiddle, DomainClassLD otherInstanceLief, IList<ChangedState> changedStates=null);
-        public bool UnlinkR5(DomainClassME oneInstanceMiddle, DomainClassLD otherInstanceLief, IList<ChangedState> changedStates=null);
-        public DomainClassME LinkedR5OneMiddle();
-        public DomainClassLD LinkedR5OtherLief();
-
-
-        // Conceptual Information Class's Operations
-
-
-
-    }
-
-    public interface DomainClassW : DomainClassDef
-    {
-        // Conceptual Information Class's Properties
-
-        string Attr_WId { get; }
-        int Attr_current_state { get; }
-
-
-        // State Machine
-
-        void TakeEvent(EventData domainEvent, bool selfEvent=false);
-
-        // Relationships 
-
-
-
-        // Conceptual Information Class's Operations
+        public string CommandWithResult(int mode, string operation);
 
 
 

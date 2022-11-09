@@ -5,11 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Kae.DomainModel.Csharp.Framework" Version="6.2.0" />
+    <PackageReference Include="Kae.DomainModel.Csharp.Framework" Version="7.3.2" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageReference Include="Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage.AzureDigitalTwins" Version="0.1.0" />
+    <PackageReference Include="Kae.DomainModel.Csharp.Framework.Adaptor" Version="1.5.1" />
+    <PackageReference Include="Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage.AzureDigitalTwins" Version="1.1.2" />
     <PackageReference Include="Azure.DigitalTwins.Core" Version="1.4.0" />
     <PackageReference Include="Azure.Identity" Version="1.7.0" />
+    <PackageReference Include="Kae.DomainModel.Csharp.Framework.ExternalEntities.AzureIoTHub" Version="0.1.1" />
   </ItemGroup>
 
 </Project>

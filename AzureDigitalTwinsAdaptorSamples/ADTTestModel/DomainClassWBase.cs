@@ -28,11 +28,11 @@ namespace ADTTestModel
         protected Logger logger;
 
 
-        public string GetIdForExternalStorage() {  return attr_WId; }
+        public string GetIdForExternalStorage() {  return $"WId={attr_WId}"; }
 
-        public static DomainClassWBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
+        public static DomainClassWBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null, bool synchronousMode = false)
         {
-            var newInstance = new DomainClassWBase(instanceRepository, logger);
+            var newInstance = new DomainClassWBase(instanceRepository, logger, synchronousMode);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:W(WId={newInstance.Attr_WId}):create");
 
             instanceRepository.Add(newInstance);
@@ -42,12 +42,12 @@ namespace ADTTestModel
             return newInstance;
         }
 
-        public DomainClassWBase(InstanceRepository instanceRepository, Logger logger)
+        public DomainClassWBase(InstanceRepository instanceRepository, Logger logger, bool synchronousMode)
         {
             this.instanceRepository = instanceRepository;
             this.logger = logger;
             attr_WId = Guid.NewGuid().ToString();
-            stateMachine = new DomainClassWStateMachine(this, instanceRepository, logger);
+            stateMachine = new DomainClassWStateMachine(this, synchronousMode, instanceRepository, logger);
         }
         protected string attr_WId;
         protected bool stateof_WId = false;
@@ -55,8 +55,12 @@ namespace ADTTestModel
         protected DomainClassWStateMachine stateMachine;
         protected bool stateof_current_state = false;
 
+        protected string attr_LiefDeviceId;
+        protected bool stateof_LiefDeviceId = false;
+
         public string Attr_WId { get { return attr_WId; } set { attr_WId = value; stateof_WId = true; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
+        public string Attr_LiefDeviceId { get { return attr_LiefDeviceId; } }
 
 
         // This method can be used as compare predicattion when calling InstanceRepository's SelectInstances method. 
@@ -73,11 +77,70 @@ namespace ADTTestModel
                             result = false;
                         }
                         break;
+                    case "LiefDeviceId":
+                        if ((string)conditionPropertyValues[propertyName] != instance.Attr_LiefDeviceId)
+                        {
+                            result = false;
+                        }
+                        break;
                 }
                 if (result== false)
                 {
                     break;
                 }
+            }
+            return result;
+        }
+        protected LinkedInstance relR6LDTarget;
+        public DomainClassLD LinkedR6Target()
+        {
+            if (relR6LDTarget == null)
+            {
+                var candidates = instanceRepository.GetDomainInstances("LD").Where(inst=>(this.Attr_LiefDeviceId==((DomainClassLD)inst).Attr_LiefDeviceId));
+                if (candidates.Count() == 0)
+                {
+                   if (instanceRepository.ExternalStorageAdaptor != null) candidates = instanceRepository.ExternalStorageAdaptor.CheckTraverseStatus(DomainName, this, "LD", "R6", candidates, () => { return DomainClassLDBase.CreateInstance(instanceRepository, logger); }, "any").Result;
+                }
+                relR6LDTarget = new LinkedInstance() { Source = this, Destination = candidates.FirstOrDefault(), RelationshipID = "R6", Phrase = "Target" };
+
+            }
+            return relR6LDTarget.GetDestination<DomainClassLD>();
+        }
+
+        public bool LinkR6Target(DomainClassLD instance, IList<ChangedState> changedStates=null)
+        {
+            bool result = false;
+            if (relR6LDTarget == null)
+            {
+                this.attr_LiefDeviceId = instance.Attr_LiefDeviceId;
+                this.stateof_LiefDeviceId = true;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:W(WId={this.Attr_WId}):link[LD(LiefDeviceId={instance.Attr_LiefDeviceId})]");
+
+                result = (LinkedR6Target()!=null);
+                if (result)
+                {
+                    if(changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Create, Target = relR6LDTarget });
+                }
+            }
+            return result;
+        }
+
+        public bool UnlinkR6Target(DomainClassLD instance, IList<ChangedState> changedStates=null)
+        {
+            bool result = false;
+            if (relR6LDTarget != null && ( this.Attr_LiefDeviceId==instance.Attr_LiefDeviceId ))
+            {
+                if (changedStates != null) changedStates.Add(new CLinkChangedState() { OP = ChangedState.Operation.Delete, Target = relR6LDTarget });
+        
+                this.attr_LiefDeviceId = null;
+                this.stateof_LiefDeviceId = true;
+                relR6LDTarget = null;
+
+                if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:W(WId={this.Attr_WId}):unlink[LD(LiefDeviceId={instance.Attr_LiefDeviceId})]");
+
+
+                result = true;
             }
             return result;
         }
@@ -100,6 +163,10 @@ namespace ADTTestModel
         public bool Validate()
         {
             bool isValid = true;
+            if (relR6LDTarget == null)
+            {
+                isValid = false;
+            }
             return isValid;
         }
 
@@ -125,6 +192,11 @@ namespace ADTTestModel
                 stateMachine.ForceUpdateState((int)propertyValues["current_state"]);
             }
             stateof_current_state = false;
+            if (propertyValues.ContainsKey("LiefDeviceId"))
+            {
+                attr_LiefDeviceId = (string)propertyValues["LiefDeviceId"];
+            }
+            stateof_LiefDeviceId = false;
         }
         
         public IDictionary<string, object> ChangedProperties()
@@ -137,6 +209,11 @@ namespace ADTTestModel
             }
             results.Add("current_state", stateMachine.CurrentState);
 
+            if (stateof_LiefDeviceId)
+            {
+                results.Add("LiefDeviceId", attr_LiefDeviceId);
+                stateof_LiefDeviceId = false;
+            }
 
             return results;
         }
@@ -154,6 +231,7 @@ namespace ADTTestModel
 
             results.Add("WId", attr_WId);
             results.Add("current_state", stateMachine.CurrentState);
+            if (!onlyIdentity) results.Add("LiefDeviceId", attr_LiefDeviceId);
 
             return results;
         }

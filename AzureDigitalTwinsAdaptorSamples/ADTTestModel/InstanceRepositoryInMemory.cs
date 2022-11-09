@@ -46,6 +46,9 @@ namespace ADTTestModel
                         case "TE":
                             newInstance = DomainClassTEBase.CreateInstance(this, logger);
                             break;
+                        case "W":
+                            newInstance = DomainClassWBase.CreateInstance(this, logger);
+                            break;
                         case "SC2":
                             newInstance = DomainClassSC2Base.CreateInstance(this, logger);
                             break;
@@ -55,14 +58,11 @@ namespace ADTTestModel
                         case "ME":
                             newInstance = DomainClassMEBase.CreateInstance(this, logger);
                             break;
-                        case "LD":
-                            newInstance = DomainClassLDBase.CreateInstance(this, logger);
-                            break;
                         case "MML":
                             newInstance = DomainClassMMLBase.CreateInstance(this, logger);
                             break;
-                        case "W":
-                            newInstance = DomainClassWBase.CreateInstance(this, logger);
+                        case "LD":
+                            newInstance = DomainClassLDBase.CreateInstance(this, logger);
                             break;
                         default:
                             if (logger != null) logger.LogError($"{className} is not right domain class.");

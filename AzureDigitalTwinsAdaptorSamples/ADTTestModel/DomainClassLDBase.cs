@@ -14,6 +14,7 @@ using Kae.StateMachine;
 using Kae.Utility.Logging;
 using Kae.DomainModel.Csharp.Framework;
 using Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage;
+using Kae.DomainModel.Csharp.Framework.ExternalEntities.AzureIoTHub;
 
 namespace ADTTestModel
 {
@@ -27,12 +28,16 @@ namespace ADTTestModel
         InstanceRepository instanceRepository;
         protected Logger logger;
 
+        protected AIHWrapper azureIoTHubWrapper { get; set; }
 
-        public string GetIdForExternalStorage() {  return attr_LiefDeviceId; }
 
-        public static DomainClassLDBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
+        public string GetIdForExternalStorage() {  return $"LiefDeviceId={attr_LiefDeviceId}"; }
+
+        public static DomainClassLDBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null, bool synchronousMode = false)
         {
-            var newInstance = new DomainClassLDBase(instanceRepository, logger);
+            var newInstance = new DomainClassLDBase(instanceRepository, logger, synchronousMode);
+            // Extension for Azure IoT Hub
+            newInstance.azureIoTHubWrapper = (AIHWrapper)instanceRepository.GetExternalEntity("AIH");
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:LD(LiefDeviceId={newInstance.Attr_LiefDeviceId}):create");
 
             instanceRepository.Add(newInstance);
@@ -42,12 +47,12 @@ namespace ADTTestModel
             return newInstance;
         }
 
-        public DomainClassLDBase(InstanceRepository instanceRepository, Logger logger)
+        public DomainClassLDBase(InstanceRepository instanceRepository, Logger logger, bool synchronousMode)
         {
             this.instanceRepository = instanceRepository;
             this.logger = logger;
             attr_LiefDeviceId = Guid.NewGuid().ToString();
-            stateMachine = new DomainClassLDStateMachine(this, instanceRepository, logger);
+            stateMachine = new DomainClassLDStateMachine(this, synchronousMode, instanceRepository, logger);
         }
         protected string attr_LiefDeviceId;
         protected bool stateof_LiefDeviceId = false;
@@ -75,9 +80,9 @@ namespace ADTTestModel
 
         public string Attr_LiefDeviceId { get { return attr_LiefDeviceId; } set { attr_LiefDeviceId = value; stateof_LiefDeviceId = true; } }
         public DomainTypeEnvironmentPhysicalQuantities Attr_Environment { get { return attr_Environment; } set { attr_Environment = value; stateof_Environment = true; } }
-        public int Attr_Number { get { return attr_Number; } set { attr_Number = value; stateof_Number = true; } }
+        public int Attr_Number { get { return attr_Number; } set { attr_Number = value; stateof_Number = true; azureIoTHubWrapper.UpdateProperty("Number", value, Attr_LiefDeviceId); } }
         public string Attr_MiddleEntityId { get { return attr_MiddleEntityId; } }
-        public int Attr_RequestInterval { get { return attr_RequestInterval; } set { attr_RequestInterval = value; stateof_RequestInterval = true; } }
+        public int Attr_RequestInterval { get { return attr_RequestInterval; } set { attr_RequestInterval = value; stateof_RequestInterval = true; azureIoTHubWrapper.UpdateProperty("RequestInterval", value, Attr_LiefDeviceId); } }
         public int Attr_CurrentInterval { get { return attr_CurrentInterval; } set { attr_CurrentInterval = value; stateof_CurrentInterval = true; } }
         public string Attr_DeviceStatus { get { return attr_DeviceStatus; } set { attr_DeviceStatus = value; stateof_DeviceStatus = true; } }
         public int Attr_current_state { get { return stateMachine.CurrentState; } }
@@ -229,6 +234,16 @@ namespace ADTTestModel
             return (DomainClassMML)candidates.FirstOrDefault();
         }
 
+        public DomainClassW LinkedR6()
+        {
+            var candidates = instanceRepository.GetDomainInstances("W").Where(inst=>(this.Attr_LiefDeviceId==((DomainClassW)inst).Attr_LiefDeviceId));
+            if (candidates.Count() == 0)
+            {
+                if (instanceRepository.ExternalStorageAdaptor != null) candidates = instanceRepository.ExternalStorageAdaptor.CheckTraverseStatus(DomainName, this, "W", "R6", candidates, () => { return DomainClassWBase.CreateInstance(instanceRepository, logger); }, "any").Result;
+                if (candidates.Count() > 0) ((DomainClassW)candidates.FirstOrDefault()).LinkedR6Target();
+            }
+            return (DomainClassW)candidates.FirstOrDefault();
+        }
 
 
         public void TakeEvent(EventData domainEvent, bool selfEvent=false)

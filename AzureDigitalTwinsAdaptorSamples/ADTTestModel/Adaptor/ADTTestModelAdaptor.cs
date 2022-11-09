@@ -37,15 +37,50 @@ namespace ADTTestModel.Adaptor
             if (adapterInstance == null)
             {
                 var instanceRepository = new InstanceRepositoryInMemory(logger);
-                var azureDigitalTwinsAdaptor = new ADTTestModelAzureDigitalTwinsAdaptor((string)Configuration["ADTInstanceUri"], (TokenCredential)Configuration["ADTCredential"], instanceRepository, logger);
-                azureDigitalTwinsAdaptor.Initialize();
-                instanceRepository.ExternalStorageAdaptor = azureDigitalTwinsAdaptor;
+
                 var cimLib = new CIMADTTestModelLib(instanceRepository);
                 adapterInstance = new ADTTestModelAdaptor(cimLib, logger);
             }
             return adapterInstance;
         }
 
+        public override IDictionary<string, IList<string>> ConfigurationKeys()
+        {
+            var configurationKeys = new Dictionary<string, IList<string>>();
+
+            var externalEntities = domainModel.InstanceRepository.GetExternalEntities();
+            foreach(var externalEntity in externalEntities)
+            {
+                configurationKeys.Add(externalEntity.EEKey, new List<string>());
+                foreach(var cKey in externalEntity.ConfigurationKeys)
+                {
+                    configurationKeys[externalEntity.EEKey].Add(cKey);
+                }
+            }
+
+            // for Azure Digital Twins Adaptor
+            configurationKeys.Add("AzureDigitalTwins", new List<string>());
+            configurationKeys["AzureDigitalTwins"].Add("ADTInstanceUri");
+            configurationKeys["AzureDigitalTwins"].Add("ADTCredential");
+
+            return configurationKeys;
+        }
+
+        public override void Initialize(IDictionary<string, IDictionary<string, object>> config)
+        {
+            var externalEntities = domainModel.InstanceRepository.GetExternalEntities();
+            foreach(var externalEntity in externalEntities)
+            {
+                externalEntity.Initialize(config[externalEntity.EEKey]);
+            }
+
+            // for Azure Digital Twins
+            string adtInstanceUri = (string)config["AzureDigitalTwins"]["ADTInstanceUri"];
+            TokenCredential adtCredential = (TokenCredential)config["AzureDigitalTwins"]["ADTCredential"];
+            var azureDigitalTwinsAdaptor = new ADTTestModelAzureDigitalTwinsAdaptor(adtInstanceUri, adtCredential, domainModel.InstanceRepository, logger);
+            azureDigitalTwinsAdaptor.Initialize();
+            domainModel.InstanceRepository.ExternalStorageAdaptor = azureDigitalTwinsAdaptor;
+        }
 
         public ADTTestModelAdaptor(CIMADTTestModelLib domainModel, Logger logger) : base(logger)
         {
@@ -68,6 +103,9 @@ namespace ADTTestModel.Adaptor
             },
             {
                 "ClearInstances", new Dictionary<string, ParamSpec>()
+            },
+            {
+                "TestExternalEntity", new Dictionary<string, ParamSpec>()
             }
         };
 
@@ -179,6 +217,60 @@ namespace ADTTestModel.Adaptor
                 }
             },
             {
+                "W", new ClassSpec()
+                {                
+                    Name = "Worker",
+                    KeyLetter = "W",
+                    Properties = new Dictionary<string, PropSpec>()
+                    {
+                        {
+                            "WId", new PropSpec()
+                            { Name = "WId", DataType = ParamSpec.DataType.String, Identity = 1, Writable = false, Mathematical = false, Reference = false, StateMachineState = false }
+                        },
+                        {
+                            "current_state", new PropSpec()
+                            { Name = "current_state", DataType = ParamSpec.DataType.Integer, Identity = 0, Writable = false, Mathematical = false, Reference = false, StateMachineState = true }
+                        },
+                        {
+                            "LiefDeviceId", new PropSpec()
+                            { Name = "LiefDeviceId", DataType = ParamSpec.DataType.String, Identity = 0, Writable = false, Mathematical = false, Reference = true, StateMachineState = false }
+                        }
+                    },
+                    Operations = new Dictionary<string, OperationSpec>(),
+                    Links = new Dictionary<string, LinkSpec>()
+                    {
+                        {
+                            "LD[R6.'target']", new LinkSpec()
+                            { Name = "LD[R6.'target']", RelID = "R6", Phrase = "target", Set = false, Condition = false, DstKeyLett = "LD" }
+                        }
+                    },
+                    Events = new Dictionary<string, OperationSpec>()
+                    {
+                        {
+                            "W_1_Create", new OperationSpec()
+                            {
+                                Name = "W_1_Create", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
+                                {
+                                    { "targetId", new ParamSpec() {Name = "targetId", TypeKind = ParamSpec.DataType.String, IsArray = false} }
+                                }
+                            }
+                        },
+                        {
+                            "W_2_Start", new OperationSpec()
+                            {
+                                Name = "W_2_Start", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
+                            }
+                        },
+                        {
+                            "W_3_Done", new OperationSpec()
+                            {
+                                Name = "W_3_Done", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
+                            }
+                        }
+                    }
+                }
+            },
+            {
                 "SC2", new ClassSpec()
                 {                
                     Name = "SubClass2",
@@ -283,6 +375,41 @@ namespace ADTTestModel.Adaptor
                 }
             },
             {
+                "MML", new ClassSpec()
+                {                
+                    Name = "Mapping Middel To Lief",
+                    KeyLetter = "MML",
+                    Properties = new Dictionary<string, PropSpec>()
+                    {
+                        {
+                            "MMLId", new PropSpec()
+                            { Name = "MMLId", DataType = ParamSpec.DataType.String, Identity = 1, Writable = false, Mathematical = false, Reference = false, StateMachineState = false }
+                        },
+                        {
+                            "MiddleEntityId", new PropSpec()
+                            { Name = "MiddleEntityId", DataType = ParamSpec.DataType.String, Identity = 2, Writable = false, Mathematical = false, Reference = true, StateMachineState = false }
+                        },
+                        {
+                            "LiefDeviceId", new PropSpec()
+                            { Name = "LiefDeviceId", DataType = ParamSpec.DataType.String, Identity = 2, Writable = false, Mathematical = false, Reference = true, StateMachineState = false }
+                        }
+                    },
+                    Operations = new Dictionary<string, OperationSpec>(),
+                    Links = new Dictionary<string, LinkSpec>()
+                    {
+                        {
+                            "ME[R5.'middle']", new LinkSpec()
+                            { Name = "ME[R5.'middle']", RelID = "R5", Phrase = "middle", Set = false, Condition = false, DstKeyLett = "ME" }
+                        },
+                        {
+                            "LD[R5.'lief']", new LinkSpec()
+                            { Name = "LD[R5.'lief']", RelID = "R5", Phrase = "lief", Set = false, Condition = false, DstKeyLett = "LD" }
+                        }
+                    },
+                    Events = new Dictionary<string, OperationSpec>()
+                }
+            },
+            {
                 "LD", new ClassSpec()
                 {                
                     Name = "Lief Device",
@@ -338,6 +465,16 @@ namespace ADTTestModel.Adaptor
                             {
                                 Name = "MeasureEnvironment", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
                             }
+                        },
+                        {
+                            "CommandWithResult", new OperationSpec()
+                            {
+                                Name = "CommandWithResult", ReturnType = ParamSpec.DataType.String, Parameters = new Dictionary<string, ParamSpec>()
+                                {
+                                    { "mode", new ParamSpec() {Name = "mode", TypeKind = ParamSpec.DataType.Integer, IsArray = false} },
+                                    { "operation", new ParamSpec() {Name = "operation", TypeKind = ParamSpec.DataType.String, IsArray = false} }
+                                }
+                            }
                         }
                     },
                     Links = new Dictionary<string, LinkSpec>()
@@ -355,6 +492,10 @@ namespace ADTTestModel.Adaptor
                             { Name = "MML[R5.'lief']", RelID = "R5", Phrase = "lief", Set = false, Condition = true, DstKeyLett = "MML" }
                         },
                         {
+                            "W[R6]", new LinkSpec()
+                            { Name = "W[R6]", RelID = "R6", Phrase = "", Set = false, Condition = true, DstKeyLett = "W" }
+                        },
+                        {
                             "ME[R2]", new LinkSpec()
                             { Name = "ME[R2]", RelID = "R2", Phrase = "", Set = false, Condition = true, DstKeyLett = "ME" }
                         }
@@ -362,91 +503,15 @@ namespace ADTTestModel.Adaptor
                     Events = new Dictionary<string, OperationSpec>()
                     {
                         {
-                            "LD1_Measure", new OperationSpec()
+                            "LD_1_Measure", new OperationSpec()
                             {
-                                Name = "LD1_Measure", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
+                                Name = "LD_1_Measure", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
                             }
                         },
                         {
-                            "LD2_Measured", new OperationSpec()
+                            "LD_2_Measured", new OperationSpec()
                             {
-                                Name = "LD2_Measured", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
-                            }
-                        }
-                    }
-                }
-            },
-            {
-                "MML", new ClassSpec()
-                {                
-                    Name = "Mapping Middel To Lief",
-                    KeyLetter = "MML",
-                    Properties = new Dictionary<string, PropSpec>()
-                    {
-                        {
-                            "MMLId", new PropSpec()
-                            { Name = "MMLId", DataType = ParamSpec.DataType.String, Identity = 1, Writable = false, Mathematical = false, Reference = false, StateMachineState = false }
-                        },
-                        {
-                            "MiddleEntityId", new PropSpec()
-                            { Name = "MiddleEntityId", DataType = ParamSpec.DataType.String, Identity = 2, Writable = false, Mathematical = false, Reference = true, StateMachineState = false }
-                        },
-                        {
-                            "LiefDeviceId", new PropSpec()
-                            { Name = "LiefDeviceId", DataType = ParamSpec.DataType.String, Identity = 2, Writable = false, Mathematical = false, Reference = true, StateMachineState = false }
-                        }
-                    },
-                    Operations = new Dictionary<string, OperationSpec>(),
-                    Links = new Dictionary<string, LinkSpec>()
-                    {
-                        {
-                            "ME[R5.'middle']", new LinkSpec()
-                            { Name = "ME[R5.'middle']", RelID = "R5", Phrase = "middle", Set = false, Condition = false, DstKeyLett = "ME" }
-                        },
-                        {
-                            "LD[R5.'lief']", new LinkSpec()
-                            { Name = "LD[R5.'lief']", RelID = "R5", Phrase = "lief", Set = false, Condition = false, DstKeyLett = "LD" }
-                        }
-                    },
-                    Events = new Dictionary<string, OperationSpec>()
-                }
-            },
-            {
-                "W", new ClassSpec()
-                {                
-                    Name = "Worker",
-                    KeyLetter = "W",
-                    Properties = new Dictionary<string, PropSpec>()
-                    {
-                        {
-                            "WId", new PropSpec()
-                            { Name = "WId", DataType = ParamSpec.DataType.String, Identity = 1, Writable = false, Mathematical = false, Reference = false, StateMachineState = false }
-                        },
-                        {
-                            "current_state", new PropSpec()
-                            { Name = "current_state", DataType = ParamSpec.DataType.Integer, Identity = 0, Writable = false, Mathematical = false, Reference = false, StateMachineState = true }
-                        }
-                    },
-                    Operations = new Dictionary<string, OperationSpec>(),
-                    Links = new Dictionary<string, LinkSpec>(),
-                    Events = new Dictionary<string, OperationSpec>()
-                    {
-                        {
-                            "W1_Create", new OperationSpec()
-                            {
-                                Name = "W1_Create", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
-                            }
-                        },
-                        {
-                            "W2_Start", new OperationSpec()
-                            {
-                                Name = "W2_Start", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
-                            }
-                        },
-                        {
-                            "W3_Done", new OperationSpec()
-                            {
-                                Name = "W3_Done", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
+                                Name = "LD_2_Measured", ReturnType = ParamSpec.DataType.Void, Parameters = new Dictionary<string, ParamSpec>()
                             }
                         }
                     }
@@ -476,6 +541,9 @@ namespace ADTTestModel.Adaptor
                             break;
                         case "ClearInstances":
                             domainModel.ClearInstances();
+                            break;
+                        case "TestExternalEntity":
+                            domainModel.TestExternalEntity();
                             break;
                     }
                     if (domainModel.InstanceRepository.ExternalStorageAdaptor != null) domainModel.InstanceRepository.ExternalStorageAdaptor.ClearCache(CIMADTTestModelLib.DomainName);
@@ -563,6 +631,10 @@ namespace ADTTestModel.Adaptor
                                             case "MeasureEnvironment":
                                                 instanceOfLD.MeasureEnvironment();
                                                 break;
+                                            case "CommandWithResult":
+                                                var resultOfCommandWithResult = new { result = instanceOfLD.CommandWithResult(mode:(int)invSpec.Parameters["mode"], operation:(string)invSpec.Parameters["operation"]) };
+                                                result = Newtonsoft.Json.JsonConvert.SerializeObject(resultOfCommandWithResult);
+                                                break;
                                             default:
                                                 var resultJson = new { result = "error", status = $"\"error-unknown-operator\":\"{name}\"" };
                                                 result = Newtonsoft.Json.JsonConvert.SerializeObject(resultJson);
@@ -602,32 +674,36 @@ namespace ADTTestModel.Adaptor
                         {
                             switch (classKeyLett)
                             {
-                                case "LD":
-                                    var instanceOfLDTempSet = domainModel.InstanceRepository.GetDomainInstances("LD").Where(selected => (((DomainClassLD)selected).Attr_LiefDeviceId == invSpec.Identities["LiefDeviceId"]));
-                                    if (domainModel.InstanceRepository.ExternalStorageAdaptor != null) instanceOfLDTempSet = domainModel.InstanceRepository.ExternalStorageAdaptor.CheckInstanceStatus(CIMADTTestModelLib.DomainName, "LD", instanceOfLDTempSet, () => { return $"LiefDeviceId = '{invSpec.Identities["LiefDeviceId"]}'"; }, () => { return DomainClassLDBase.CreateInstance(domainModel.InstanceRepository, logger); }, "any").Result;
-                                    var instanceOfLD = (DomainClassLD)instanceOfLDTempSet.FirstOrDefault();
+                                case "W":
+                                    var instanceOfWTempSet = domainModel.InstanceRepository.GetDomainInstances("W").Where(selected => (((DomainClassW)selected).Attr_WId == invSpec.Identities["WId"]));
+                                    if (domainModel.InstanceRepository.ExternalStorageAdaptor != null) instanceOfWTempSet = domainModel.InstanceRepository.ExternalStorageAdaptor.CheckInstanceStatus(CIMADTTestModelLib.DomainName, "W", instanceOfWTempSet, () => { return $"WId = '{invSpec.Identities["WId"]}'"; }, () => { return DomainClassWBase.CreateInstance(domainModel.InstanceRepository, logger); }, "any").Result;
+                                    var instanceOfW = (DomainClassW)instanceOfWTempSet.FirstOrDefault();
                                     switch (name)
                                     {
-                                        case "LD1_Measure":
-                                            var evtOfLD1_Measure = DomainClassLDStateMachine.LD1_Measure.Create(instanceOfLD, sendNow:true);
-                                            if (evtOfLD1_Measure != null)
+                                        case "W_1_Create":
+                                            DomainClassWStateMachine.W_1_Create.Create(instanceOfW, targetId:(string)invSpec.Parameters["targetId"], isSelfEvent:false, sendNow:true, domainModel.InstanceRepository, logger:logger);
+                                            sent = true;
+                                            break;
+                                        case "W_2_Start":
+                                            var evtOfW_2_Start = DomainClassWStateMachine.W_2_Start.Create(instanceOfW, isSelfEvent:false, sendNow:true);
+                                            if (evtOfW_2_Start != null)
                                             {
                                                 sent = true;
                                             }
                                             else
                                             {
-                                                status = $"unexisted instance - LiefDeviceId = '{invSpec.Identities["LiefDeviceId"]}'";
+                                                status = $"unexisted instance - WId = '{invSpec.Identities["WId"]}'";
                                             }
                                             break;
-                                        case "LD2_Measured":
-                                            var evtOfLD2_Measured = DomainClassLDStateMachine.LD2_Measured.Create(instanceOfLD, sendNow:true);
-                                            if (evtOfLD2_Measured != null)
+                                        case "W_3_Done":
+                                            var evtOfW_3_Done = DomainClassWStateMachine.W_3_Done.Create(instanceOfW, isSelfEvent:false, sendNow:true);
+                                            if (evtOfW_3_Done != null)
                                             {
                                                 sent = true;
                                             }
                                             else
                                             {
-                                                status = $"unexisted instance - LiefDeviceId = '{invSpec.Identities["LiefDeviceId"]}'";
+                                                status = $"unexisted instance - WId = '{invSpec.Identities["WId"]}'";
                                             }
                                             break;
                                         default:
@@ -635,36 +711,32 @@ namespace ADTTestModel.Adaptor
                                             break;
                                     }
                                     break;
-                                case "W":
-                                    var instanceOfWTempSet = domainModel.InstanceRepository.GetDomainInstances("W").Where(selected => (((DomainClassW)selected).Attr_WId == invSpec.Identities["WId"]));
-                                    if (domainModel.InstanceRepository.ExternalStorageAdaptor != null) instanceOfWTempSet = domainModel.InstanceRepository.ExternalStorageAdaptor.CheckInstanceStatus(CIMADTTestModelLib.DomainName, "W", instanceOfWTempSet, () => { return $"WId = '{invSpec.Identities["WId"]}'"; }, () => { return DomainClassWBase.CreateInstance(domainModel.InstanceRepository, logger); }, "any").Result;
-                                    var instanceOfW = (DomainClassW)instanceOfWTempSet.FirstOrDefault();
+                                case "LD":
+                                    var instanceOfLDTempSet = domainModel.InstanceRepository.GetDomainInstances("LD").Where(selected => (((DomainClassLD)selected).Attr_LiefDeviceId == invSpec.Identities["LiefDeviceId"]));
+                                    if (domainModel.InstanceRepository.ExternalStorageAdaptor != null) instanceOfLDTempSet = domainModel.InstanceRepository.ExternalStorageAdaptor.CheckInstanceStatus(CIMADTTestModelLib.DomainName, "LD", instanceOfLDTempSet, () => { return $"LiefDeviceId = '{invSpec.Identities["LiefDeviceId"]}'"; }, () => { return DomainClassLDBase.CreateInstance(domainModel.InstanceRepository, logger); }, "any").Result;
+                                    var instanceOfLD = (DomainClassLD)instanceOfLDTempSet.FirstOrDefault();
                                     switch (name)
                                     {
-                                        case "W1_Create":
-                                            DomainClassWStateMachine.W1_Create.Create(instanceOfW, sendNow:true, domainModel.InstanceRepository, logger:logger);
-                                            sent = true;
-                                            break;
-                                        case "W2_Start":
-                                            var evtOfW2_Start = DomainClassWStateMachine.W2_Start.Create(instanceOfW, sendNow:true);
-                                            if (evtOfW2_Start != null)
+                                        case "LD_1_Measure":
+                                            var evtOfLD_1_Measure = DomainClassLDStateMachine.LD_1_Measure.Create(instanceOfLD, isSelfEvent:false, sendNow:true);
+                                            if (evtOfLD_1_Measure != null)
                                             {
                                                 sent = true;
                                             }
                                             else
                                             {
-                                                status = $"unexisted instance - WId = '{invSpec.Identities["WId"]}'";
+                                                status = $"unexisted instance - LiefDeviceId = '{invSpec.Identities["LiefDeviceId"]}'";
                                             }
                                             break;
-                                        case "W3_Done":
-                                            var evtOfW3_Done = DomainClassWStateMachine.W3_Done.Create(instanceOfW, sendNow:true);
-                                            if (evtOfW3_Done != null)
+                                        case "LD_2_Measured":
+                                            var evtOfLD_2_Measured = DomainClassLDStateMachine.LD_2_Measured.Create(instanceOfLD, isSelfEvent:false, sendNow:true);
+                                            if (evtOfLD_2_Measured != null)
                                             {
                                                 sent = true;
                                             }
                                             else
                                             {
-                                                status = $"unexisted instance - WId = '{invSpec.Identities["WId"]}'";
+                                                status = $"unexisted instance - LiefDeviceId = '{invSpec.Identities["LiefDeviceId"]}'";
                                             }
                                             break;
                                         default:
@@ -804,6 +876,14 @@ namespace ADTTestModel.Adaptor
                             resultOfinstanceOfTE.Add("TestInterval", instanceOfTE.Attr_TestInterval);
                             resultInstances.Add(resultOfinstanceOfTE);
                             break;
+                        case "W":
+                            var instanceOfW = (DomainClassW)instance;
+                            var resultOfinstanceOfW = new Dictionary<string, object>();
+                            resultOfinstanceOfW.Add("WId", instanceOfW.Attr_WId);
+                            resultOfinstanceOfW.Add("current_state", instanceOfW.Attr_current_state);
+                            resultOfinstanceOfW.Add("LiefDeviceId", instanceOfW.Attr_LiefDeviceId);
+                            resultInstances.Add(resultOfinstanceOfW);
+                            break;
                         case "SC2":
                             var instanceOfSC2 = (DomainClassSC2)instance;
                             var resultOfinstanceOfSC2 = new Dictionary<string, object>();
@@ -826,6 +906,14 @@ namespace ADTTestModel.Adaptor
                             resultOfinstanceOfME.Add("PreferredHumidity", instanceOfME.Attr_PreferredHumidity);
                             resultInstances.Add(resultOfinstanceOfME);
                             break;
+                        case "MML":
+                            var instanceOfMML = (DomainClassMML)instance;
+                            var resultOfinstanceOfMML = new Dictionary<string, object>();
+                            resultOfinstanceOfMML.Add("MMLId", instanceOfMML.Attr_MMLId);
+                            resultOfinstanceOfMML.Add("MiddleEntityId", instanceOfMML.Attr_MiddleEntityId);
+                            resultOfinstanceOfMML.Add("LiefDeviceId", instanceOfMML.Attr_LiefDeviceId);
+                            resultInstances.Add(resultOfinstanceOfMML);
+                            break;
                         case "LD":
                             var instanceOfLD = (DomainClassLD)instance;
                             var resultOfinstanceOfLD = new Dictionary<string, object>();
@@ -838,21 +926,6 @@ namespace ADTTestModel.Adaptor
                             resultOfinstanceOfLD.Add("DeviceStatus", instanceOfLD.Attr_DeviceStatus);
                             resultOfinstanceOfLD.Add("current_state", instanceOfLD.Attr_current_state);
                             resultInstances.Add(resultOfinstanceOfLD);
-                            break;
-                        case "MML":
-                            var instanceOfMML = (DomainClassMML)instance;
-                            var resultOfinstanceOfMML = new Dictionary<string, object>();
-                            resultOfinstanceOfMML.Add("MMLId", instanceOfMML.Attr_MMLId);
-                            resultOfinstanceOfMML.Add("MiddleEntityId", instanceOfMML.Attr_MiddleEntityId);
-                            resultOfinstanceOfMML.Add("LiefDeviceId", instanceOfMML.Attr_LiefDeviceId);
-                            resultInstances.Add(resultOfinstanceOfMML);
-                            break;
-                        case "W":
-                            var instanceOfW = (DomainClassW)instance;
-                            var resultOfinstanceOfW = new Dictionary<string, object>();
-                            resultOfinstanceOfW.Add("WId", instanceOfW.Attr_WId);
-                            resultOfinstanceOfW.Add("current_state", instanceOfW.Attr_current_state);
-                            resultInstances.Add(resultOfinstanceOfW);
                             break;
                     }
                 }
@@ -893,6 +966,15 @@ namespace ADTTestModel.Adaptor
                         resultInstance.Add("TestInterval", instanceOfTE.Attr_TestInterval);
                     }
                     break;
+                case "W":
+                    DomainClassW instanceOfW = (DomainClassW)domainModel.InstanceRepository.GetDomainInstances("W").Where(selected => (((DomainClassW)selected).Attr_WId == identities["WId"])).FirstOrDefault();
+                    if (instanceOfW != null)
+                    {
+                        resultInstance.Add("WId", instanceOfW.Attr_WId);
+                        resultInstance.Add("current_state", instanceOfW.Attr_current_state);
+                        resultInstance.Add("LiefDeviceId", instanceOfW.Attr_LiefDeviceId);
+                    }
+                    break;
                 case "SC2":
                     DomainClassSC2 instanceOfSC2 = (DomainClassSC2)domainModel.InstanceRepository.GetDomainInstances("SC2").Where(selected => (((DomainClassSC2)selected).Attr_TSId == identities["TSId"])).FirstOrDefault();
                     if (instanceOfSC2 != null)
@@ -918,6 +1000,15 @@ namespace ADTTestModel.Adaptor
                         resultInstance.Add("PreferredHumidity", instanceOfME.Attr_PreferredHumidity);
                     }
                     break;
+                case "MML":
+                    DomainClassMML instanceOfMML = (DomainClassMML)domainModel.InstanceRepository.GetDomainInstances("MML").Where(selected => (((DomainClassMML)selected).Attr_MMLId == identities["MMLId"])).FirstOrDefault();
+                    if (instanceOfMML != null)
+                    {
+                        resultInstance.Add("MMLId", instanceOfMML.Attr_MMLId);
+                        resultInstance.Add("MiddleEntityId", instanceOfMML.Attr_MiddleEntityId);
+                        resultInstance.Add("LiefDeviceId", instanceOfMML.Attr_LiefDeviceId);
+                    }
+                    break;
                 case "LD":
                     DomainClassLD instanceOfLD = (DomainClassLD)domainModel.InstanceRepository.GetDomainInstances("LD").Where(selected => (((DomainClassLD)selected).Attr_LiefDeviceId == identities["LiefDeviceId"])).FirstOrDefault();
                     if (instanceOfLD != null)
@@ -930,23 +1021,6 @@ namespace ADTTestModel.Adaptor
                         resultInstance.Add("CurrentInterval", instanceOfLD.Attr_CurrentInterval);
                         resultInstance.Add("DeviceStatus", instanceOfLD.Attr_DeviceStatus);
                         resultInstance.Add("current_state", instanceOfLD.Attr_current_state);
-                    }
-                    break;
-                case "MML":
-                    DomainClassMML instanceOfMML = (DomainClassMML)domainModel.InstanceRepository.GetDomainInstances("MML").Where(selected => (((DomainClassMML)selected).Attr_MMLId == identities["MMLId"])).FirstOrDefault();
-                    if (instanceOfMML != null)
-                    {
-                        resultInstance.Add("MMLId", instanceOfMML.Attr_MMLId);
-                        resultInstance.Add("MiddleEntityId", instanceOfMML.Attr_MiddleEntityId);
-                        resultInstance.Add("LiefDeviceId", instanceOfMML.Attr_LiefDeviceId);
-                    }
-                    break;
-                case "W":
-                    DomainClassW instanceOfW = (DomainClassW)domainModel.InstanceRepository.GetDomainInstances("W").Where(selected => (((DomainClassW)selected).Attr_WId == identities["WId"])).FirstOrDefault();
-                    if (instanceOfW != null)
-                    {
-                        resultInstance.Add("WId", instanceOfW.Attr_WId);
-                        resultInstance.Add("current_state", instanceOfW.Attr_current_state);
                     }
                     break;
             }
@@ -1058,6 +1132,32 @@ namespace ADTTestModel.Adaptor
                                 }
                             }
                             break;
+                        case "W":
+                            DomainClassW instanceOfW = (DomainClassW)domainModel.InstanceRepository.GetDomainInstances("W").Where(selected => (((DomainClassW)selected).Attr_WId == identities["WId"])).FirstOrDefault();
+                            if (instanceOfW != null)
+                            {
+                                switch (relName)
+                                {
+                                    case "LD[R6.'target']":
+                                        var linkedInstanceOfR6TargetLD = instanceOfW.LinkedR6Target();
+                                        if (linkedInstanceOfR6TargetLD != null)
+                                        {
+                                            resultInstances.Add(new Dictionary<string, object>()
+                                            {
+                                                { "LiefDeviceId", linkedInstanceOfR6TargetLD.Attr_LiefDeviceId },
+                                                { "Environment", linkedInstanceOfR6TargetLD.Attr_Environment },
+                                                { "Number", linkedInstanceOfR6TargetLD.Attr_Number },
+                                                { "MiddleEntityId", linkedInstanceOfR6TargetLD.Attr_MiddleEntityId },
+                                                { "RequestInterval", linkedInstanceOfR6TargetLD.Attr_RequestInterval },
+                                                { "CurrentInterval", linkedInstanceOfR6TargetLD.Attr_CurrentInterval },
+                                                { "DeviceStatus", linkedInstanceOfR6TargetLD.Attr_DeviceStatus },
+                                                { "current_state", linkedInstanceOfR6TargetLD.Attr_current_state }
+                                            });
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
                         case "SC2":
                             DomainClassSC2 instanceOfSC2 = (DomainClassSC2)domainModel.InstanceRepository.GetDomainInstances("SC2").Where(selected => (((DomainClassSC2)selected).Attr_TSId == identities["TSId"])).FirstOrDefault();
                             if (instanceOfSC2 != null)
@@ -1147,6 +1247,46 @@ namespace ADTTestModel.Adaptor
                                 }
                             }
                             break;
+                        case "MML":
+                            DomainClassMML instanceOfMML = (DomainClassMML)domainModel.InstanceRepository.GetDomainInstances("MML").Where(selected => (((DomainClassMML)selected).Attr_MMLId == identities["MMLId"])).FirstOrDefault();
+                            if (instanceOfMML != null)
+                            {
+                                switch (relName)
+                                {
+                                    case "ME[R5.'middle']":
+                                        var linkedInstanceOfR5OneMiddleME = instanceOfMML.LinkedR5OneMiddle();
+                                        if (linkedInstanceOfR5OneMiddleME != null)
+                                        {
+                                            resultInstances.Add(new Dictionary<string, object>()
+                                            {
+                                                { "MiddleEntityId", linkedInstanceOfR5OneMiddleME.Attr_MiddleEntityId },
+                                                { "TopEntityId", linkedInstanceOfR5OneMiddleME.Attr_TopEntityId },
+                                                { "Comfortable", linkedInstanceOfR5OneMiddleME.Attr_Comfortable },
+                                                { "PreferredTemperature", linkedInstanceOfR5OneMiddleME.Attr_PreferredTemperature },
+                                                { "PreferredHumidity", linkedInstanceOfR5OneMiddleME.Attr_PreferredHumidity }
+                                            });
+                                        }
+                                        break;
+                                    case "LD[R5.'lief']":
+                                        var linkedInstanceOfR5OtherLiefLD = instanceOfMML.LinkedR5OtherLief();
+                                        if (linkedInstanceOfR5OtherLiefLD != null)
+                                        {
+                                            resultInstances.Add(new Dictionary<string, object>()
+                                            {
+                                                { "LiefDeviceId", linkedInstanceOfR5OtherLiefLD.Attr_LiefDeviceId },
+                                                { "Environment", linkedInstanceOfR5OtherLiefLD.Attr_Environment },
+                                                { "Number", linkedInstanceOfR5OtherLiefLD.Attr_Number },
+                                                { "MiddleEntityId", linkedInstanceOfR5OtherLiefLD.Attr_MiddleEntityId },
+                                                { "RequestInterval", linkedInstanceOfR5OtherLiefLD.Attr_RequestInterval },
+                                                { "CurrentInterval", linkedInstanceOfR5OtherLiefLD.Attr_CurrentInterval },
+                                                { "DeviceStatus", linkedInstanceOfR5OtherLiefLD.Attr_DeviceStatus },
+                                                { "current_state", linkedInstanceOfR5OtherLiefLD.Attr_current_state }
+                                            });
+                                        }
+                                        break;
+                                }
+                            }
+                            break;
                         case "LD":
                             DomainClassLD instanceOfLD = (DomainClassLD)domainModel.InstanceRepository.GetDomainInstances("LD").Where(selected => (((DomainClassLD)selected).Attr_LiefDeviceId == identities["LiefDeviceId"])).FirstOrDefault();
                             if (instanceOfLD != null)
@@ -1189,6 +1329,18 @@ namespace ADTTestModel.Adaptor
                                             });
                                         }
                                         break;
+                                    case "W[R6]":
+                                        var linkedInstanceOfR6W = instanceOfLD.LinkedR6();
+                                        if (linkedInstanceOfR6W != null)
+                                        {
+                                            resultInstances.Add(new Dictionary<string, object>()
+                                            {
+                                                { "WId", linkedInstanceOfR6W.Attr_WId },
+                                                { "current_state", linkedInstanceOfR6W.Attr_current_state },
+                                                { "LiefDeviceId", linkedInstanceOfR6W.Attr_LiefDeviceId }
+                                            });
+                                        }
+                                        break;
                                     case "ME[R2]":
                                         var linkedInstanceOfR2ME = instanceOfLD.LinkedR2();
                                         if (linkedInstanceOfR2ME != null)
@@ -1203,55 +1355,6 @@ namespace ADTTestModel.Adaptor
                                             });
                                         }
                                         break;
-                                }
-                            }
-                            break;
-                        case "MML":
-                            DomainClassMML instanceOfMML = (DomainClassMML)domainModel.InstanceRepository.GetDomainInstances("MML").Where(selected => (((DomainClassMML)selected).Attr_MMLId == identities["MMLId"])).FirstOrDefault();
-                            if (instanceOfMML != null)
-                            {
-                                switch (relName)
-                                {
-                                    case "ME[R5.'middle']":
-                                        var linkedInstanceOfR5OneMiddleME = instanceOfMML.LinkedR5OneMiddle();
-                                        if (linkedInstanceOfR5OneMiddleME != null)
-                                        {
-                                            resultInstances.Add(new Dictionary<string, object>()
-                                            {
-                                                { "MiddleEntityId", linkedInstanceOfR5OneMiddleME.Attr_MiddleEntityId },
-                                                { "TopEntityId", linkedInstanceOfR5OneMiddleME.Attr_TopEntityId },
-                                                { "Comfortable", linkedInstanceOfR5OneMiddleME.Attr_Comfortable },
-                                                { "PreferredTemperature", linkedInstanceOfR5OneMiddleME.Attr_PreferredTemperature },
-                                                { "PreferredHumidity", linkedInstanceOfR5OneMiddleME.Attr_PreferredHumidity }
-                                            });
-                                        }
-                                        break;
-                                    case "LD[R5.'lief']":
-                                        var linkedInstanceOfR5OtherLiefLD = instanceOfMML.LinkedR5OtherLief();
-                                        if (linkedInstanceOfR5OtherLiefLD != null)
-                                        {
-                                            resultInstances.Add(new Dictionary<string, object>()
-                                            {
-                                                { "LiefDeviceId", linkedInstanceOfR5OtherLiefLD.Attr_LiefDeviceId },
-                                                { "Environment", linkedInstanceOfR5OtherLiefLD.Attr_Environment },
-                                                { "Number", linkedInstanceOfR5OtherLiefLD.Attr_Number },
-                                                { "MiddleEntityId", linkedInstanceOfR5OtherLiefLD.Attr_MiddleEntityId },
-                                                { "RequestInterval", linkedInstanceOfR5OtherLiefLD.Attr_RequestInterval },
-                                                { "CurrentInterval", linkedInstanceOfR5OtherLiefLD.Attr_CurrentInterval },
-                                                { "DeviceStatus", linkedInstanceOfR5OtherLiefLD.Attr_DeviceStatus },
-                                                { "current_state", linkedInstanceOfR5OtherLiefLD.Attr_current_state }
-                                            });
-                                        }
-                                        break;
-                                }
-                            }
-                            break;
-                        case "W":
-                            DomainClassW instanceOfW = (DomainClassW)domainModel.InstanceRepository.GetDomainInstances("W").Where(selected => (((DomainClassW)selected).Attr_WId == identities["WId"])).FirstOrDefault();
-                            if (instanceOfW != null)
-                            {
-                                switch (relName)
-                                {
                                 }
                             }
                             break;

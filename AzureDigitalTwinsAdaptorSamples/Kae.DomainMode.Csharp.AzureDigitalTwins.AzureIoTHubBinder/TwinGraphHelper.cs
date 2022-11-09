@@ -1,11 +1,10 @@
 ﻿using Azure;
+// Copyright (c) Knowledge & Experience. All rights reserved.
+// Licensed under the MIT license. See LICENSE file in the project root for full license information.
 using Azure.DigitalTwins.Core;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Net.Sockets;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Kae.DomainMode.Csharp.AzureDigitalTwins.AzureIoTHubBinder

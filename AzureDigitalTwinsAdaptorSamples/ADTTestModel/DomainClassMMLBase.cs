@@ -28,11 +28,11 @@ namespace ADTTestModel
         protected Logger logger;
 
 
-        public string GetIdForExternalStorage() {  return attr_MMLId; }
+        public string GetIdForExternalStorage() {  return $"MMLId={attr_MMLId}"; }
 
-        public static DomainClassMMLBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
+        public static DomainClassMMLBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null, bool synchronousMode = false)
         {
-            var newInstance = new DomainClassMMLBase(instanceRepository, logger);
+            var newInstance = new DomainClassMMLBase(instanceRepository, logger, synchronousMode);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:MML(MMLId={newInstance.Attr_MMLId}):create");
 
             instanceRepository.Add(newInstance);
@@ -42,7 +42,7 @@ namespace ADTTestModel
             return newInstance;
         }
 
-        public DomainClassMMLBase(InstanceRepository instanceRepository, Logger logger)
+        public DomainClassMMLBase(InstanceRepository instanceRepository, Logger logger, bool synchronousMode)
         {
             this.instanceRepository = instanceRepository;
             this.logger = logger;

@@ -28,11 +28,11 @@ namespace ADTTestModel
         protected Logger logger;
 
 
-        public string GetIdForExternalStorage() {  return attr_MiddleEntityId; }
+        public string GetIdForExternalStorage() {  return $"MiddleEntityId={attr_MiddleEntityId}"; }
 
-        public static DomainClassMEBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
+        public static DomainClassMEBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null, bool synchronousMode = false)
         {
-            var newInstance = new DomainClassMEBase(instanceRepository, logger);
+            var newInstance = new DomainClassMEBase(instanceRepository, logger, synchronousMode);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:ME(MiddleEntityId={newInstance.Attr_MiddleEntityId}):create");
 
             instanceRepository.Add(newInstance);
@@ -42,7 +42,7 @@ namespace ADTTestModel
             return newInstance;
         }
 
-        public DomainClassMEBase(InstanceRepository instanceRepository, Logger logger)
+        public DomainClassMEBase(InstanceRepository instanceRepository, Logger logger, bool synchronousMode)
         {
             this.instanceRepository = instanceRepository;
             this.logger = logger;

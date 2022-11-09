@@ -10,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.IO;
+using System.Text;
 using System.Reflection;
 using Kae.DomainModel.Csharp.Framework;
 using Kae.DomainModel.Csharp.Framework.Adaptor.ExternalStorage;
@@ -266,6 +268,49 @@ namespace ADTTestModel
 
 
             instanceRepository.SyncChangedStates(changedStates);
+        }
+        public void TestExternalEntity()
+        {
+            // TODO: Let's write action code!
+            // Action Description on Model as a reference.
+
+            //  1 : text = "abc";
+            //  2 : text_length = STR::len( expression:text );
+
+
+            var changedStates = new List<ChangedState>();
+            
+            // Generated from action description
+            // External Entities Reference Declarations.
+            var _eeSTRRef_ = (Kae.DomainModel.Csharp.Framework.ExternalEntity.STR.STRWrapper)instanceRepository.GetExternalEntity("STR");
+
+            // Line : 1
+            var text = "abc";
+            // Line : 2
+            var text_length = _eeSTRRef_.len(expression:text);
+
+            instanceRepository.SyncChangedStates(changedStates);
+        }
+
+        public IList<string> CreateExternalEntities()
+        {
+            var configuration = new List<string>();
+
+            instanceRepository.Add(new Kae.DomainModel.Csharp.Framework.ExternalEntity.STR.STRImpl());
+            var refOfSTR = instanceRepository.GetExternalEntity("STR");
+            configuration.AddRange(refOfSTR.ConfigurationKeys);
+
+            instanceRepository.Add(new Kae.DomainModel.Csharp.Framework.ExternalEntities.AzureIoTHub.AzureIoTHubImpl());
+            var refOfAIH = instanceRepository.GetExternalEntity("AIH");
+            configuration.AddRange(refOfAIH.ConfigurationKeys);
+            return configuration;
+        }
+        public void Initialize(IDictionary<string, IDictionary<string, object>> configuration)
+        {
+            var refOfSTR = instanceRepository.GetExternalEntity("STR");
+            refOfSTR.Initialize(configuration["STR"]);
+            var refOfAIH = instanceRepository.GetExternalEntity("AIH");
+            refOfAIH.Initialize(configuration["AIH"]);
         }
     }
 }

@@ -16,10 +16,28 @@ namespace ADTTestModel
 {
     partial class DomainClassWStateMachine
     {
-        protected void ActionCreated()
+        protected void ActionCreated(string targetId)
         {
             // Action Description on Model as a reference.
 
+            //  1 : SELECT ANY ld FROM INSTANCES OF LD WHERE SELECTED.LiefDeviceId == param.targetId;
+            //  2 : IF NOT_EMPTY ld
+            //  3 : 	RELATE SELF TO ld ACROSS R6;
+            //  4 : END IF;
+
+            // Line : 1
+            var ldTempSet = instanceRepository.GetDomainInstances("LD").Where(selected => ((((DomainClassLD)selected).Attr_LiefDeviceId == targetId)));
+            if (instanceRepository.ExternalStorageAdaptor != null) ldTempSet = instanceRepository.ExternalStorageAdaptor.CheckInstanceStatus(DomainName, "LD", ldTempSet, () => { return $"(LiefDeviceId = targetId)"; }, () => { return DomainClassLDBase.CreateInstance(instanceRepository, logger); }, "any").Result;
+            var ld = (DomainClassLD)(ldTempSet.FirstOrDefault());
+
+            // Line : 2
+            if (ld != null)
+            {
+                // Line : 3
+                // SELF - R6 -> ld;
+                target.LinkR6Target(ld, changedStates);
+
+            }
 
 
         }
@@ -28,6 +46,25 @@ namespace ADTTestModel
         {
             // Action Description on Model as a reference.
 
+            //  1 : SELECT ONE ld RELATED BY SELF->LD[R6.'target'];
+            //  2 : GENERATE LD1:Measure TO ld;
+            //  3 : GENERATE W3:Done TO SELF;
+
+            // Line : 1
+            var ld = target.LinkedR6Target();
+
+            // Line : 2
+            if (instanceRepository.ExternalStorageAdaptor != null && instanceRepository.ExternalStorageAdaptor.DoseEventComeFromExternal())
+            {
+                changedStates.Add(new CEventChangedState() { OP = ChangedState.Operation.Create, Target = ld, Event = DomainClassLDStateMachine.LD_1_Measure.Create(receiver:ld, false, sendNow:false) });
+            }
+            else
+            {
+                DomainClassLDStateMachine.LD_1_Measure.Create(receiver:ld, isSelfEvent:false, sendNow:true);
+            }
+
+            // Line : 3
+            DomainClassWStateMachine.W_3_Done.Create(receiver:target, isSelfEvent:true, sendNow:true);
 
 
         }
@@ -36,6 +73,15 @@ namespace ADTTestModel
         {
             // Action Description on Model as a reference.
 
+            //  1 : SELECT ONE ld RELATED BY SELF->LD[R6.'target'];
+            //  2 : UNRELATE ld FROM SELF ACROSS R6;
+
+            // Line : 1
+            var ld = target.LinkedR6Target();
+
+            // Line : 2
+            // Unrelate ld From SELF Across R6
+            target.UnlinkR6Target(ld, changedStates);
 
 
         }

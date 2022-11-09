@@ -28,11 +28,11 @@ namespace ADTTestModel
         protected Logger logger;
 
 
-        public string GetIdForExternalStorage() {  return attr_OodId; }
+        public string GetIdForExternalStorage() {  return $"OodId={attr_OodId}"; }
 
-        public static DomainClassOODBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null)
+        public static DomainClassOODBase CreateInstance(InstanceRepository instanceRepository, Logger logger=null, IList<ChangedState> changedStates=null, bool synchronousMode = false)
         {
-            var newInstance = new DomainClassOODBase(instanceRepository, logger);
+            var newInstance = new DomainClassOODBase(instanceRepository, logger, synchronousMode);
             if (logger != null) logger.LogInfo($"@{DateTime.Now.ToString("yyyyMMddHHmmss.fff")}:OOD(OodId={newInstance.Attr_OodId}):create");
 
             instanceRepository.Add(newInstance);
@@ -42,7 +42,7 @@ namespace ADTTestModel
             return newInstance;
         }
 
-        public DomainClassOODBase(InstanceRepository instanceRepository, Logger logger)
+        public DomainClassOODBase(InstanceRepository instanceRepository, Logger logger, bool synchronousMode)
         {
             this.instanceRepository = instanceRepository;
             this.logger = logger;

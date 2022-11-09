@@ -20,9 +20,9 @@ namespace ADTTestModel
     {
         public enum Events
         {
-            W1 = 0,     // Create
-            W2 = 1,     // Start
-            W3 = 2    // Done
+            W_1 = 0,     // Create
+            W_2 = 1,     // Start
+            W_3 = 2    // Done
         }
 
         public enum States
@@ -33,11 +33,15 @@ namespace ADTTestModel
             Completed = 3
         }
 
-        public class W1_Create : EventData
+        private interface IEventArgsTargetIdDef
+        {
+            public string targetId { get; set; }
+        }
+        public class W_1_Create : EventData, IEventArgsTargetIdDef
         {
             DomainClassW reciever;
 
-            public W1_Create(DomainClassW reciever) : base((int)Events.W1)
+            public W_1_Create(DomainClassW reciever) : base("W_1_Create", (int)Events.W_1)
             {
                 this.reciever = reciever;
             }
@@ -47,9 +51,10 @@ namespace ADTTestModel
                 reciever.TakeEvent(this);
             }
 
-            public static W1_Create Create(DomainClassW receiver, bool sendNow, InstanceRepository instanceRepository, Logger logger)
+            public string targetId { get; set; }
+            public static W_1_Create Create(DomainClassW receiver, string targetId, bool isSelfEvent, bool sendNow, InstanceRepository instanceRepository, Logger logger)
             {
-                var newEvent = new W1_Create(receiver);
+                var newEvent = new W_1_Create(receiver) { targetId = targetId };
                 if (receiver == null && instanceRepository != null)
                 {
                     receiver = DomainClassWBase.CreateInstance(instanceRepository, logger);
@@ -61,13 +66,22 @@ namespace ADTTestModel
 
                 return newEvent;
             }
+
+            public override IDictionary<string, object> GetSupplementalData()
+            {
+                var supplementalData = new Dictionary<string, object>();
+
+                supplementalData.Add("targetId", targetId);
+
+                return supplementalData;
+            }
         }
 
-        public class W2_Start : EventData
+        public class W_2_Start : EventData
         {
             DomainClassW reciever;
 
-            public W2_Start(DomainClassW reciever) : base((int)Events.W2)
+            public W_2_Start(DomainClassW reciever) : base("W_2_Start", (int)Events.W_2)
             {
                 this.reciever = reciever;
             }
@@ -77,14 +91,14 @@ namespace ADTTestModel
                 reciever.TakeEvent(this);
             }
 
-            public static W2_Start Create(DomainClassW receiver, bool sendNow)
+            public static W_2_Start Create(DomainClassW receiver, bool isSelfEvent, bool sendNow)
             {
-                var newEvent = new W2_Start(receiver);
+                var newEvent = new W_2_Start(receiver);
                 if (receiver != null)
                 {
                     if (sendNow)
                     {
-                        receiver.TakeEvent(newEvent);
+                        receiver.TakeEvent(newEvent, isSelfEvent);
                     }
                 }
                 else
@@ -97,13 +111,21 @@ namespace ADTTestModel
 
                 return newEvent;
             }
+
+            public override IDictionary<string, object> GetSupplementalData()
+            {
+                var supplementalData = new Dictionary<string, object>();
+
+
+                return supplementalData;
+            }
         }
 
-        public class W3_Done : EventData
+        public class W_3_Done : EventData
         {
             DomainClassW reciever;
 
-            public W3_Done(DomainClassW reciever) : base((int)Events.W3)
+            public W_3_Done(DomainClassW reciever) : base("W_3_Done", (int)Events.W_3)
             {
                 this.reciever = reciever;
             }
@@ -113,14 +135,14 @@ namespace ADTTestModel
                 reciever.TakeEvent(this);
             }
 
-            public static W3_Done Create(DomainClassW receiver, bool sendNow)
+            public static W_3_Done Create(DomainClassW receiver, bool isSelfEvent, bool sendNow)
             {
-                var newEvent = new W3_Done(receiver);
+                var newEvent = new W_3_Done(receiver);
                 if (receiver != null)
                 {
                     if (sendNow)
                     {
-                        receiver.TakeEvent(newEvent);
+                        receiver.TakeEvent(newEvent, isSelfEvent);
                     }
                 }
                 else
@@ -132,6 +154,14 @@ namespace ADTTestModel
                 }
 
                 return newEvent;
+            }
+
+            public override IDictionary<string, object> GetSupplementalData()
+            {
+                var supplementalData = new Dictionary<string, object>();
+
+
+                return supplementalData;
             }
         }
 
@@ -139,7 +169,10 @@ namespace ADTTestModel
 
         protected InstanceRepository instanceRepository;
 
-        public DomainClassWStateMachine(DomainClassW target, InstanceRepository instanceRepository, Logger logger) : base(0, logger)
+        protected string DomainName { get { return target.DomainName; } }
+
+        // Constructor
+        public DomainClassWStateMachine(DomainClassW target, bool synchronousMode, InstanceRepository instanceRepository, Logger logger) : base(0, synchronousMode, logger)
         {
             this.target = target;
             this.stateTransition = this;
@@ -171,7 +204,7 @@ namespace ADTTestModel
             switch (nextState)
             {
             case (int)States.Created:
-                ActionCreated();
+                ActionCreated(((IEventArgsTargetIdDef)eventData).targetId);
                 break;
             case (int)States.Working:
                 ActionWorking();
